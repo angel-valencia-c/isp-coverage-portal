@@ -43,7 +43,7 @@ Este documento descompone el proyecto en fases de implementación secuenciales, 
 
 ---
 
-## Detalle de Fases
+## Detalle de Fases.
 
 ### Fase 1: Setup y Base Técnica
 
