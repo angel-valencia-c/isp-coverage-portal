@@ -47,44 +47,392 @@ Este documento descompone el proyecto en fases de implementación secuenciales, 
 
 ### Fase 1: Setup y Base Técnica
 
+#### Especificación Técnica (Spec-Driven Development)
+
 **Objetivo**
-Establecer la estructura inicial del proyecto, configurar dependencias y preparar el entorno de desarrollo para las fases siguientes.
+Establecer la infraestructura técnica completa del proyecto con Python 3.12 + Flask, MySQL, SQLAlchemy y herramientas de desarrollo, creando una base sólida y funcional sobre la cual construir las fases siguientes.
 
 **Alcance**
-- Inicializar estructura de carpetas según PROJECT.md
-- Configurar package.json con dependencias base (frontend y backend)
-- Configurar variables de entorno
-- Establecer configuración de base de datos
-- Configurar servidor web básico
-- Establecer estructura de rutas base
-- Configurar middleware básico (logging, error handling)
+
+1. **Estructura del Proyecto**
+   - Crear estructura de carpetas según PROJECT.md
+   - Configurar entorno virtual de Python 3.12
+   - Establecer archivos de configuración base (requirements.txt, .env.example)
+
+2. **Backend (Flask)**
+   - Instalar Flask y dependencias base desde requirements.txt
+   - Configurar aplicación Flask con factory pattern
+   - Establecer estructura de blueprints
+   - Configurar CORS para frontend
+   - Implementar middleware básico (logging, error handling)
+
+3. **Base de Datos (MySQL + SQLAlchemy)**
+   - Configurar conexión a MySQL con SQLAlchemy
+   - Instalar Flask-SQLAlchemy y Flask-Migrate
+   - Configurar Alembic para migraciones
+   - Establecer configuración de pools de conexión
+   - Crear script de inicialización de BD
+
+4. **Configuración y Entorno**
+   - Configurar python-dotenv para variables de entorno
+   - Crear archivo .env.example con todas las variables necesarias
+   - Establecer configuración por entorno (development, testing, production)
+   - Configurar logging estructurado
+
+5. **Testing**
+   - Instalar pytest y pytest-cov
+   - Configurar estructura de tests
+   - Crear fixtures base
+   - Establecer configuración de coverage
+
+6. **Documentación**
+   - Crear README.md con instrucciones de setup
+   - Documentar variables de entorno
+   - Documentar comandos disponibles
+
+**Comandos Ejecutables**
+
+```bash
+# Crear entorno virtual de Python 3.12
+python3.12 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
+
+# Instalación de dependencias
+pip install -r requirements.txt
+
+# Configuración inicial
+cp .env.example .env
+# Editar .env con credenciales locales de MySQL
+
+# Inicializar migraciones con Alembic/Flask-Migrate
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+
+# Ejecutar servidor de desarrollo Flask
+export FLASK_APP=app
+export FLASK_ENV=development
+flask run --host=0.0.0.0 --port=5000
+
+# Ejecutar tests con pytest
+pytest
+pytest --cov=app --cov-report=html
+
+# Linting (opcional)
+flake8 app/
+black app/
+```
+
+**Estructura de Proyecto (Definición Explícita)**
+
+```
+estadia/
+├── app/                              # Aplicación Flask principal
+│   ├── __init__.py                   # Factory pattern (create_app)
+│   ├── config.py                     # Configuración por entorno
+│   ├── extensions.py                 # Extensiones Flask (db, migrate, cors)
+│   ├── models/                       # Modelos SQLAlchemy (vacío en Fase 1)
+│   │   └── __init__.py
+│   ├── routes/                       # Blueprints Flask (vacío en Fase 1)
+│   │   ├── __init__.py
+│   │   └── health.py                 # Endpoint de salud
+│   ├── services/                     # Lógica de negocio (vacío en Fase 1)
+│   │   └── __init__.py
+│   └── utils/                        # Utilidades auxiliares
+│       └── __init__.py
+├── migrations/                       # Migraciones Alembic (generado por flask db init)
+│   ├── versions/                     # Archivos de migración
+│   ├── env.py                        # Configuración Alembic
+│   └── alembic.ini                   # Configuración Alembic
+├── tests/                            # Tests pytest
+│   ├── __init__.py
+│   ├── conftest.py                   # Fixtures globales (app, client, db)
+│   └── test_health.py                # Test de salud inicial
+├── public/                           # Frontend estático (HTML/CSS/JS vanilla)
+│   ├── css/                          # Estilos CSS
+│   ├── js/                           # JavaScript vanilla
+│   └── images/                       # Imágenes y activos
+├── venv/                             # Entorno virtual Python (no commitear)
+├── .env                              # Variables de entorno locales (no commitear)
+├── .env.example                      # Template de variables de entorno
+├── .gitignore                        # Ignorar venv/, .env, __pycache__/
+├── requirements.txt                  # Dependencias Python (Flask, SQLAlchemy, etc.)
+├── pytest.ini                        # Configuración pytest
+├── README.md                         # Documentación del proyecto
+└── IMPLEMENTATION_PHASES.md          # Plan de implementación
+```
+
+**Configuración de Flask-SQLAlchemy (app/extensions.py)**
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_cors import CORS
+
+db = SQLAlchemy()
+migrate = Migrate()
+cors = CORS()
+```
+
+**Configuración de Alembic (app/config.py)**
+
+```python
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Config:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_size': 10,
+        'pool_recycle': 3600,
+        'pool_pre_ping': True
+    }
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_ECHO = True
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.getenv('TESTING_DATABASE_URL')
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+config_by_name = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}
+```
+
+**Factory Pattern (app/__init__.py)**
+
+```python
+from flask import Flask
+from .config import config_by_name
+from .extensions import db, migrate, cors
+
+def create_app(config_name='development'):
+    app = Flask(__name__, static_folder='../public')
+    app.config.from_object(config_by_name[config_name])
+    
+    # Inicializar extensiones
+    db.init_app(app)
+    migrate.init_app(app, db)
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    
+    # Registrar blueprints
+    from .routes.health import health_bp
+    app.register_blueprint(health_bp)
+    
+    return app
+```
+
+**Dependencias Python (requirements.txt)**
+
+```txt
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.5
+Flask-CORS==4.0.0
+PyMySQL==1.1.0
+python-dotenv==1.0.0
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-flask==1.3.0
+cryptography==41.0.7
+```
+
+**Variables de Entorno (.env.example)**
+
+```bash
+# Flask
+FLASK_APP=app
+FLASK_ENV=development
+SECRET_KEY=your-secret-key-here
+
+# Base de Datos
+DATABASE_URL=mysql+pymysql://user:password@localhost:3306/enlaces_costa_grande
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your-password
+DB_NAME=enlaces_costa_grande
+
+# Testing
+TESTING_DATABASE_URL=mysql+pymysql://user:password@localhost:3306/enlaces_test
+
+# Logging
+LOG_LEVEL=DEBUG
+```
+
+**Estilo de Código**
+
+```python
+# app/__init__.py - Factory Pattern
+from flask import Flask
+from .config import config_by_name
+from .extensions import db, migrate
+
+def create_app(config_name='development'):
+    app = Flask(__name__, static_folder='../public')
+    app.config.from_object(config_by_name[config_name])
+    
+    # Inicializar extensiones
+    db.init_app(app)
+    migrate.init_app(app, db)
+    
+    # Registrar blueprints (Fase 2+)
+    # from .routes import main_bp
+    # app.register_blueprint(main_bp)
+    
+    return app
+```
+
+**Estrategia de Testing**
+
+- **Framework**: pytest con pytest-cov
+- **Cobertura mínima**: 80% para código de negocio
+- **Estructura**: tests/ espejo de app/
+- **Fixtures**: conftest.py con fixtures para app, client, db
+- **Tests de Fase 1**: 
+  - Test de salud de la aplicación
+  - Test de conexión a BD
+  - Test de configuración de entorno
+
+**Boundaries**
+
+**Siempre:**
+- Usar factory pattern para crear la app
+- Mantener configuración separada por entorno
+- Documentar todas las variables de entorno
+- Ejecutar tests antes de completar la fase
+- Seguir PEP 8 y convenciones de Flask
+
+**Preguntar primero:**
+- Cambios en la estructura de carpetas
+- Agregar nuevas dependencias
+- Modificar configuración de BD
+- Cambiar puerto de desarrollo
+
+**Nunca:**
+- Hardcodear credenciales en el código
+- Commitar archivo .env
+- Ignorar errores de conexión a BD
+- Saltar la configuración de testing
+
+**Criterios de Aceptación**
+
+1. ✅ El servidor Flask inicia sin errores en puerto 5000
+2. ✅ La aplicación responde en endpoint `/health` con status 200
+3. ✅ La conexión a MySQL se establece correctamente
+4. ✅ SQLAlchemy está configurado y funcional
+5. ✅ Alembic/Flask-Migrate está inicializado
+6. ✅ Las variables de entorno se cargan desde .env
+7. ✅ pytest ejecuta sin errores y genera reporte de coverage
+8. ✅ La estructura de carpetas sigue el PROJECT.md
+9. ✅ README.md contiene instrucciones completas de setup
+10. ✅ El entorno virtual funciona correctamente
+
+**Riesgos Identificados**
+
+1. **Riesgo**: Problemas de conexión a MySQL
+   - **Mitigación**: Verificar credenciales y permisos antes de iniciar
+   - **Fallback**: Usar SQLite temporalmente para desarrollo
+
+2. **Riesgo**: Conflictos de versiones de dependencias
+   - **Mitigación**: Usar versiones específicas en requirements.txt
+   - **Fallback**: Crear entorno virtual limpio
+
+3. **Riesgo**: Configuración incorrecta de Alembic
+   - **Mitigación**: Seguir documentación oficial de Flask-Migrate
+   - **Fallback**: Configurar migraciones manualmente
+
+**Tareas Iniciales**
+
+- [ ] **Tarea 1.1**: Crear estructura de carpetas
+  - **Acceptance**: Todas las carpetas existen según estructura definida
+  - **Verify**: `tree -L 2` muestra estructura correcta
+  - **Files**: Todas las carpetas del proyecto
+
+- [ ] **Tarea 1.2**: Configurar entorno virtual e instalar dependencias
+  - **Acceptance**: requirements.txt creado, entorno virtual funcional
+  - **Verify**: `pip list` muestra Flask, SQLAlchemy, pytest instalados
+  - **Files**: requirements.txt, venv/
+
+- [ ] **Tarea 1.3**: Crear aplicación Flask con factory pattern
+  - **Acceptance**: app/__init__.py con create_app() funcional
+  - **Verify**: `flask run` inicia servidor sin errores
+  - **Files**: app/__init__.py, app/config.py, app/extensions.py
+
+- [ ] **Tarea 1.4**: Configurar variables de entorno
+  - **Acceptance**: .env.example creado, python-dotenv funcional
+  - **Verify**: Variables se cargan correctamente en la app
+  - **Files**: .env.example, .gitignore
+
+- [ ] **Tarea 1.5**: Configurar conexión a MySQL con SQLAlchemy
+  - **Acceptance**: Conexión a BD establecida, extensiones inicializadas
+  - **Verify**: Test de conexión pasa exitosamente
+  - **Files**: app/extensions.py, app/config.py
+
+- [ ] **Tarea 1.6**: Inicializar Alembic/Flask-Migrate
+  - **Acceptance**: Carpeta migrations/ creada, configuración funcional
+  - **Verify**: `flask db --help` muestra comandos disponibles
+  - **Files**: migrations/, app/__init__.py
+
+- [ ] **Tarea 1.7**: Configurar pytest y crear tests base
+  - **Acceptance**: pytest ejecuta, coverage se genera
+  - **Verify**: `pytest --cov=app` ejecuta sin errores
+  - **Files**: pytest.ini, tests/conftest.py, tests/test_health.py
+
+- [ ] **Tarea 1.8**: Crear endpoint de salud
+  - **Acceptance**: GET /health retorna 200 OK
+  - **Verify**: `curl http://localhost:5000/health` retorna status 200
+  - **Files**: app/routes/health.py
+
+- [ ] **Tarea 1.9**: Crear README.md con instrucciones
+  - **Acceptance**: README contiene setup completo, comandos, variables
+  - **Verify**: README es claro y completo
+  - **Files**: README.md
+
+- [ ] **Tarea 1.10**: Validación final de la Fase 1
+  - **Acceptance**: Todos los criterios de aceptación cumplidos
+  - **Verify**: Checklist completo, tests pasan, servidor funcional
+  - **Files**: Todos
 
 **Dependencias**
 - Ninguna (primera fase)
 
 **Entregables**
-- Estructura de carpetas funcional
-- Servidor que inicia sin errores
-- Conexión a base de datos establecida
-- Configuración de entorno documentada
-- README con instrucciones de setup
-
-**Criterios de Revisión**
-- ¿El servidor inicia correctamente?
-- ¿La conexión a base de datos funciona?
-- ¿Las variables de entorno están configuradas?
-- ¿La estructura de carpetas sigue el PROJECT.md?
-- ¿Se puede ejecutar el proyecto localmente?
+- Estructura de carpetas completa y funcional
+- Aplicación Flask operativa con factory pattern
+- Conexión a MySQL establecida y configurada
+- SQLAlchemy y Alembic inicializados
+- Sistema de variables de entorno funcional
+- Suite de tests configurada y ejecutable
+- README.md con instrucciones completas
+- requirements.txt con todas las dependencias
 
 **Fuera de Alcance**
-- Cualquier funcionalidad de negocio
-- Modelos de datos específicos
-- Interfaces de usuario
+- Modelos de datos específicos (Fase 2)
+- Migraciones de tablas de negocio (Fase 2)
+- Endpoints de negocio (Fases 3+)
+- Interfaces de usuario (Fases 4+)
+- Autenticación (Fase 3)
+- Lógica de negocio (Fases 3+)
 
 **Observaciones**
-- Decisión pendiente: Stack backend específico (Node.js/Express vs PHP/Laravel vs Python/Flask)
+- Stack confirmado: Python 3.12 + Flask + MySQL + SQLAlchemy + Alembic + pytest
 - El portal es público y accesible desde internet (RN-024)
-- Esta fase debe resolverse antes de continuar
+- Esta fase establece la base técnica para todas las fases siguientes
+- No implementar funcionalidad de negocio en esta fase
+- Validar que todos los componentes funcionan antes de avanzar a Fase 2
 
 ---
 
@@ -642,6 +990,7 @@ Estas capacidades están preparadas en el modelo de datos o son evoluciones futu
 |-------|-------------|
 | 2026-07-30 | Versión inicial del plan de implementación |
 | 2026-07-30 | Alineación con PROJECT.md v7.0: eliminación de decisiones cerradas, corrección de referencias a costos (estándar base + ajuste por zona), contrato firmado, portal público, y compresión de preguntas pendientes a solo 5 realmente abiertas |
+| 2026-07-30 | Fase 1: Especificación técnica completa con spec-driven-development. Stack confirmado: Python 3.12 + Flask + MySQL + SQLAlchemy + Alembic + pytest. Incluye objetivos, alcance, comandos, estructura, estilo de código, estrategia de testing, boundaries, criterios de aceptación, riesgos y 10 tareas descompuestas |
 
 ---
 
