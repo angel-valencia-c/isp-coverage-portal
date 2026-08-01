@@ -1,0 +1,78 @@
+"""
+Portal de Verificación de Cobertura y Solicitud de Instalación
+Enlaces Costa Grande
+
+Aplicación Flask principal con factory pattern.
+"""
+
+import os
+import logging
+from flask import Flask
+from .config import config_by_name
+from .extensions import db, migrate, cors
+from .cli import register_commands
+
+
+def create_app(config_name=None):
+    """
+    Factory function para crear la aplicación Flask
+    
+    Args:
+        config_name (str): Nombre de la configuración a usar 
+                          ('development', 'testing', 'production')
+    
+    Returns:
+        Flask: Instancia de la aplicación Flask configurada
+    """
+    if config_name is None:
+        config_name = os.getenv('FLASK_ENV', 'development')
+    
+    # Crear instancia de Flask
+    app = Flask(__name__, static_folder='../public')
+    
+    # Cargar configuración
+    app.config.from_object(config_by_name.get(config_name, config_by_name['default']))
+    
+    # Configurar logging
+    logging.basicConfig(
+        level=getattr(logging, app.config['LOG_LEVEL']),
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    
+    # Inicializar extensiones
+    db.init_app(app)
+    migrate.init_app(app, db)
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
+    
+    # Importar modelos para que Flask-Migrate pueda detectarlos
+    # Esto es necesario para que Alembic vea el esquema de la base de datos
+    from . import models  # noqa: F401
+    
+    # Registrar comandos CLI
+    register_commands(app)
+    
+    # Registrar blueprints
+    from .routes.health import health_bp
+    app.register_blueprint(health_bp)
+    
+    # Ruta raíz
+    @app.route('/')
+    def index():
+        return {
+            'status': 'ok',
+            'message': 'Portal de Verificación de Cobertura - Enlaces Costa Grande',
+            'version': '1.0.0'
+        }
+    
+    # Manejo de errores
+    @app.errorhandler(404)
+    def not_found(error):
+        return {'error': 'Not Found', 'message': 'Recurso no encontrado'}, 404
+    
+    @app.errorhandler(500)
+    def internal_error(error):
+        return {'error': 'Internal Server Error', 'message': 'Error interno del servidor'}, 500
+    
+    app.logger.info(f'Aplicación Flask iniciada en modo {config_name}')
+    
+    return app
