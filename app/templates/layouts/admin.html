@@ -58,7 +58,7 @@
             </nav>
             <div class="sidebar-footer" style="margin-top: var(--space-8); padding-top: var(--space-4); border-top: var(--border);">
                 <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-2);">
-                    {{ usuario.nombre }}
+                    {{ current_user.nombre }}
                 </p>
                 <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-full">
                     Cerrar Sesión

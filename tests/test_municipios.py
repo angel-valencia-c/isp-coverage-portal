@@ -84,7 +84,9 @@ class TestMunicipioService:
     def test_get_all_incluye_inactivos(self, app, municipio_prueba):
         """Test de obtener todos los municipios incluyendo inactivos"""
         with app.app_context():
-            municipio_prueba.activo = False
+            # Desactivar municipio recargándolo desde BD
+            municipio = Municipio.query.get(municipio_prueba.id)
+            municipio.activo = False
             db.session.commit()
             
             municipios_activos = MunicipioService.get_all(incluir_inactivos=False)
