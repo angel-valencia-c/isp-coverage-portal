@@ -1,0 +1,77 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Municipios{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Municipios</h1>
+    <p class="main-subtitle">Administración del catálogo de municipios</p>
+</div>
+
+<div class="card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="card-title">Lista de Municipios</h3>
+        <div>
+            <a href="{{ url_for('municipios.list', incluir_inactivos='true' if not incluir_inactivos else 'false') }}" class="btn btn-secondary">
+                {% if incluir_inactivos %}Ocultar Inactivos{% else %}Mostrar Inactivos{% endif %}
+            </a>
+            <a href="{{ url_for('municipios.new') }}" class="btn btn-primary">
+                Nuevo Municipio
+            </a>
+        </div>
+    </div>
+    
+    {% if municipios %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Fecha Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for municipio in municipios %}
+            <tr>
+                <td>{{ municipio.id }}</td>
+                <td>{{ municipio.nombre }}</td>
+                <td>{{ municipio.estado }}</td>
+                <td>{{ municipio.fecha_creacion.strftime('%d/%m/%Y') }}</td>
+                <td>
+                    {% if municipio.activo %}
+                        <span class="badge badge-success">Activo</span>
+                    {% else %}
+                        <span class="badge badge-error">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('municipios.edit', municipio_id=municipio.id) }}" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                        Editar
+                    </a>
+                    {% if municipio.activo %}
+                        <form method="POST" action="{{ url_for('municipios.deactivate', municipio_id=municipio.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);" onclick="return confirm('¿Estás seguro de desactivar este municipio?')">
+                                Desactivar
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('municipios.activate', municipio_id=municipio.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                                Activar
+                            </button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
+        No hay municipios registrados.
+    </p>
+    {% endif %}
+</div>
+{% endblock %}

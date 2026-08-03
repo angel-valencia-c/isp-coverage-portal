@@ -1,0 +1,48 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}{% if municipio %}Editar{% else %}Nuevo{% endif %} Municipio{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">{% if municipio %}Editar{% else %}Nuevo{% endif %} Municipio</h1>
+    <p class="main-subtitle">{% if municipio %}Modificar datos del municipio{% else %}Crear un nuevo municipio{% endif %}</p>
+</div>
+
+<div class="card">
+    <form method="POST" action="{% if municipio %}{{ url_for('municipios.edit', municipio_id=municipio.id) }}{% else %}{{ url_for('municipios.new') }}{% endif %}">
+        <div class="form-field">
+            <label for="nombre" class="form-label">Nombre del Municipio *</label>
+            <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                class="form-input" 
+                value="{{ municipio.nombre if municipio else '' }}"
+                required
+                placeholder="Ej: Acapulco de Juárez"
+            >
+        </div>
+        
+        <div class="form-field">
+            <label for="estado" class="form-label">Estado</label>
+            <input 
+                type="text" 
+                id="estado" 
+                name="estado" 
+                class="form-input" 
+                value="{{ municipio.estado if municipio else 'Guerrero' }}"
+                placeholder="Ej: Guerrero"
+            >
+        </div>
+        
+        <div style="display: flex; gap: var(--space-4); margin-top: var(--space-8);">
+            <button type="submit" class="btn btn-primary">
+                {% if municipio %}Actualizar{% else %}Crear{% endif %} Municipio
+            </button>
+            <a href="{{ url_for('municipios.list') }}" class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

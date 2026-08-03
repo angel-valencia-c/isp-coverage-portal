@@ -71,9 +71,11 @@ def create_app(config_name=None):
     from .routes.health import health_bp
     from .routes.auth import auth_bp
     from .routes.admin import admin_bp
+    from .routes.admin.municipios import municipios_bp
     app.register_blueprint(health_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(municipios_bp)
     
     # Ruta raíz
     @app.route('/')
