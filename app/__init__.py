@@ -9,7 +9,7 @@ import os
 import logging
 from flask import Flask
 from .config import config_by_name
-from .extensions import db, migrate, cors
+from .extensions import db, migrate, cors, login_manager
 from .cli import register_commands
 
 
@@ -44,6 +44,22 @@ def create_app(config_name=None):
     migrate.init_app(app, db)
     cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
     
+    # Configurar Flask-Login
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Por favor inicia sesión para acceder a esta página'
+    login_manager.login_message_category = 'warning'
+    
+    # Configurar sesión (30 minutos de inactividad - RNF-012)
+    app.config['PERMANENT_SESSION_LIFETIME'] = 1800  # 30 minutos en segundos
+    
+    # Loader para Flask-Login
+    from app.models.usuario import UsuarioAdministrativo
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        return UsuarioAdministrativo.query.get(int(user_id))
+    
     # Importar modelos para que Flask-Migrate pueda detectarlos
     # Esto es necesario para que Alembic vea el esquema de la base de datos
     from . import models  # noqa: F401
@@ -53,7 +69,11 @@ def create_app(config_name=None):
     
     # Registrar blueprints
     from .routes.health import health_bp
+    from .routes.auth import auth_bp
+    from .routes.admin import admin_bp
     app.register_blueprint(health_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp)
     
     # Ruta raíz
     @app.route('/')

@@ -1,0 +1,25 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Dashboard</h1>
+    <p class="main-subtitle">Bienvenido al panel administrativo de Enlaces Costa Grande</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Resumen del Sistema</h3>
+    </div>
+    <p>
+        El sistema de gestión de cobertura está operativo. 
+        Los módulos de administración estarán disponibles próximamente.
+    </p>
+    <div class="mt-6">
+        <p><strong>Usuario actual:</strong> {{ usuario.nombre }}</p>
+        <p><strong>Email:</strong> {{ usuario.email }}</p>
+        <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+    </div>
+</div>
+{% endblock %}

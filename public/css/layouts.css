@@ -1,0 +1,173 @@
+/* ========================================
+   LAYOUTS
+   Portal Enlaces Costa Grande
+   ======================================== */
+
+/* Layout de Autenticación */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    background-color: var(--color-surface-alt);
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--color-surface);
+    border: var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-8);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.auth-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+}
+
+.auth-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.auth-form {
+    margin-bottom: var(--space-6);
+}
+
+.auth-messages {
+    margin-bottom: var(--space-6);
+}
+
+.auth-footer {
+    text-align: center;
+    padding-top: var(--space-6);
+    border-top: var(--border);
+}
+
+.auth-footer-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+/* Layout Administrativo */
+.layout-admin {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--color-surface);
+    border-right: var(--border);
+    padding: var(--space-6);
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-4);
+    border-bottom: var(--border);
+}
+
+.sidebar-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-2);
+}
+
+.sidebar-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav-item {
+    margin-bottom: var(--space-2);
+}
+
+.sidebar-nav-link {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+}
+
+.sidebar-nav-link:hover {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text);
+}
+
+.sidebar-nav-link.active {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+    font-weight: var(--font-medium);
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: var(--space-8);
+    background-color: var(--color-surface-alt);
+}
+
+.main-header {
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-6);
+    border-bottom: var(--border);
+}
+
+.main-title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-2);
+}
+
+.main-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: var(--border);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .layout-admin {
+        flex-direction: column;
+    }
+}
+
+/* Contenedor general */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}

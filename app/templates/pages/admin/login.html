@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión - Panel Administrativo{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+    <div class="form-field">
+        <label for="email" class="form-label">Email</label>
+        <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-input" 
+            value="{{ email|default('') }}"
+            required 
+            autofocus
+            placeholder="tu@email.com"
+        >
+    </div>
+    
+    <div class="form-field">
+        <label for="password" class="form-label">Contraseña</label>
+        <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="form-input" 
+            required
+            placeholder="••••••••"
+        >
+    </div>
+    
+    <button type="submit" class="btn btn-primary btn-full">
+        Iniciar Sesión
+    </button>
+</form>
+
+<div class="auth-footer">
+    <p class="auth-footer-text">
+        ¿Problemas para acceder? Contacta al administrador del sistema.
+    </p>
+</div>
+{% endblock %}

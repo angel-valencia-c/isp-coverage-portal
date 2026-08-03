@@ -6,11 +6,12 @@ Pueden ser superadministradores, administradores o personal de ventas.
 """
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 from app.extensions import db
 from .base import BaseModel
 
 
-class UsuarioAdministrativo(BaseModel):
+class UsuarioAdministrativo(UserMixin, BaseModel):
     """
     Usuario con acceso al panel administrativo.
     
@@ -96,6 +97,25 @@ class UsuarioAdministrativo(BaseModel):
             bool: True si el password es correcto, False en caso contrario
         """
         return check_password_hash(self._password_hash, password)
+    
+    def get_id(self):
+        """
+        Retorna el identificador del usuario para Flask-Login.
+        
+        Returns:
+            str: ID del usuario como string
+        """
+        return str(self.id)
+    
+    @property
+    def is_active(self):
+        """
+        Indica si el usuario está activo (puede hacer login).
+        
+        Returns:
+            bool: True si el usuario está activo, False en caso contrario
+        """
+        return self.activo
     
     def __repr__(self):
         return f'<UsuarioAdministrativo {self.email} - {self.rol}>'
