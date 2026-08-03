@@ -1,0 +1,103 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Colonias{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Colonias y Comunidades</h1>
+    <p class="main-subtitle">Administración del catálogo de colonias por municipio</p>
+</div>
+
+<div class="card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="card-title">Lista de Colonias</h3>
+        <div>
+            <a href="{{ url_for('colonias.list', incluir_inactivos='true' if not incluir_inactivos else 'false', municipio_id=municipio_id or '') }}" class="btn btn-secondary">
+                {% if incluir_inactivos %}Ocultar Inactivas{% else %}Mostrar Inactivas{% endif %}
+            </a>
+            <a href="{{ url_for('colonias.new') }}" class="btn btn-primary">
+                Nueva Colonia
+            </a>
+        </div>
+    </div>
+    
+    <!-- Filtro por municipio -->
+    <div style="margin-bottom: var(--space-6); padding: var(--space-4); background-color: var(--color-surface-alt); border-radius: var(--radius-sm);">
+        <form method="GET" action="{{ url_for('colonias.list') }}" style="display: flex; gap: var(--space-4); align-items: end;">
+            <div style="flex: 1;">
+                <label for="municipio_id" class="form-label">Filtrar por Municipio</label>
+                <select id="municipio_id" name="municipio_id" class="form-input">
+                    <option value="">Todos los municipios</option>
+                    {% for municipio in municipios %}
+                        <option value="{{ municipio.id }}" {% if municipio_id == municipio.id %}selected{% endif %}>
+                            {{ municipio.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            {% if municipio_id %}
+                <a href="{{ url_for('colonias.list') }}" class="btn btn-secondary">Limpiar</a>
+            {% endif %}
+        </form>
+    </div>
+    
+    {% if colonias %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Municipio</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for colonia in colonias %}
+            <tr>
+                <td>{{ colonia.id }}</td>
+                <td>{{ colonia.nombre }}</td>
+                <td>{{ colonia.tipo|capitalize }}</td>
+                <td>{{ colonia.municipio.nombre }}</td>
+                <td>
+                    {% if colonia.activo %}
+                        <span class="badge badge-success">Activa</span>
+                    {% else %}
+                        <span class="badge badge-error">Inactiva</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('colonias.edit', colonia_id=colonia.id) }}" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                        Editar
+                    </a>
+                    {% if colonia.activo %}
+                        <form method="POST" action="{{ url_for('colonias.deactivate', colonia_id=colonia.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);" onclick="return confirm('¿Estás seguro de desactivar esta colonia?')">
+                                Desactivar
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('colonias.activate', colonia_id=colonia.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                                Activar
+                            </button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
+        {% if municipio_id %}
+            No hay colonias registradas en este municipio.
+        {% else %}
+            No hay colonias registradas.
+        {% endif %}
+    </p>
+    {% endif %}
+</div>
+{% endblock %}

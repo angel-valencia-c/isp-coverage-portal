@@ -1,0 +1,58 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}{% if colonia %}Editar{% else %}Nueva{% endif %} Colonia{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">{% if colonia %}Editar{% else %}Nueva{% endif %} Colonia</h1>
+    <p class="main-subtitle">{% if colonia %}Modificar datos de la colonia{% else %}Crear una nueva colonia o comunidad{% endif %}</p>
+</div>
+
+<div class="card">
+    <form method="POST" action="{% if colonia %}{{ url_for('colonias.edit', colonia_id=colonia.id) }}{% else %}{{ url_for('colonias.new') }}{% endif %}">
+        <div class="form-field">
+            <label for="nombre" class="form-label">Nombre de la Colonia *</label>
+            <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                class="form-input" 
+                value="{{ colonia.nombre if colonia else '' }}"
+                required
+                placeholder="Ej: Centro, Las Playas, etc."
+            >
+        </div>
+        
+        <div class="form-field">
+            <label for="tipo" class="form-label">Tipo *</label>
+            <select id="tipo" name="tipo" class="form-input" required>
+                <option value="colonia" {% if colonia and colonia.tipo == 'colonia' %}selected{% endif %}>Colonia</option>
+                <option value="comunidad" {% if colonia and colonia.tipo == 'comunidad' %}selected{% endif %}>Comunidad</option>
+                <option value="ranchería" {% if colonia and colonia.tipo == 'ranchería' %}selected{% endif %}>Ranchería</option>
+                <option value="otra" {% if colonia and colonia.tipo == 'otra' %}selected{% endif %}>Otra</option>
+            </select>
+        </div>
+        
+        <div class="form-field">
+            <label for="municipio_id" class="form-label">Municipio *</label>
+            <select id="municipio_id" name="municipio_id" class="form-input" required>
+                <option value="">Selecciona un municipio</option>
+                {% for municipio in municipios %}
+                    <option value="{{ municipio.id }}" {% if colonia and colonia.municipio_id == municipio.id %}selected{% endif %}>
+                        {{ municipio.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div style="display: flex; gap: var(--space-4); margin-top: var(--space-8);">
+            <button type="submit" class="btn btn-primary">
+                {% if colonia %}Actualizar{% else %}Crear{% endif %} Colonia
+            </button>
+            <a href="{{ url_for('colonias.list') }}" class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
