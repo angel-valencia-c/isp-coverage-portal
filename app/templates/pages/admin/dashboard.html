@@ -8,18 +8,140 @@
     <p class="main-subtitle">Bienvenido al panel administrativo de Enlaces Costa Grande</p>
 </div>
 
+<!-- Métricas Generales -->
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Resumen del Sistema</h3>
+        <h3 class="card-title">Métricas Generales</h3>
     </div>
-    <p>
-        El sistema de gestión de cobertura está operativo. 
-        Los módulos de administración de cobertura y planes estarán disponibles próximamente.
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6);">
+        <div style="text-align: center;">
+            <div style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-accent);">
+                {{ metricas.total_municipios }}
+            </div>
+            <div style="color: var(--color-text-secondary);">Municipios Activos</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-accent);">
+                {{ metricas.total_colonias }}
+            </div>
+            <div style="color: var(--color-text-secondary);">Colonias Activas</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-success);">
+                {{ metricas.total_coberturas_activas }}
+            </div>
+            <div style="color: var(--color-text-secondary);">Coberturas Activas</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-accent);">
+                {{ metricas.total_planes_activos }}
+            </div>
+            <div style="color: var(--color-text-secondary);">Planes Activos</div>
+        </div>
+    </div>
+</div>
+
+<!-- Solicitudes -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Solicitudes</h3>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-4);">
+        <div style="text-align: center; padding: var(--space-4); background-color: var(--color-surface-alt); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-2xl); font-weight: var(--font-bold);">
+                {{ metricas.total_solicitudes }}
+            </div>
+            <div style="color: var(--color-text-secondary); font-size: var(--text-sm);">Total</div>
+        </div>
+        <div style="text-align: center; padding: var(--space-4); background-color: var(--color-warning-light); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-warning);">
+                {{ metricas.solicitudes_pendientes }}
+            </div>
+            <div style="color: var(--color-text-secondary); font-size: var(--text-sm);">Pendientes</div>
+        </div>
+        <div style="text-align: center; padding: var(--space-4); background-color: var(--color-accent-light); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-accent);">
+                {{ metricas.solicitudes_contactadas }}
+            </div>
+            <div style="color: var(--color-text-secondary); font-size: var(--text-sm);">Contactadas</div>
+        </div>
+        <div style="text-align: center; padding: var(--space-4); background-color: var(--color-success-light); border-radius: var(--radius-sm);">
+            <div style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-success);">
+                {{ metricas.solicitudes_agendadas }}
+            </div>
+            <div style="color: var(--color-text-secondary); font-size: var(--text-sm);">Agendadas</div>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas -->
+{% if metricas.coberturas_sin_planes > 0 %}
+<div class="card" style="border-left: 4px solid var(--color-warning);">
+    <div class="card-header">
+        <h3 class="card-title" style="color: var(--color-warning);">Atención: Coberturas sin Planes</h3>
+    </div>
+    <p style="margin-bottom: var(--space-4);">
+        Hay <strong>{{ metricas.coberturas_sin_planes }}</strong> cobertura(s) activa(s) sin planes asociados.
+        Los prospectos en estas zonas no podrán ver planes disponibles.
     </p>
-    <div class="mt-6">
-        <p><strong>Usuario actual:</strong> {{ current_user.nombre }}</p>
-        <p><strong>Email:</strong> {{ current_user.email }}</p>
-        <p><strong>Rol:</strong> {{ current_user.rol }}</p>
+    <a href="{{ url_for('cobertura.list') }}" class="btn btn-primary">
+        Gestionar Coberturas
+    </a>
+</div>
+{% endif %}
+
+<!-- Solicitudes Recientes -->
+{% if solicitudes_recientes %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Solicitudes Recientes</h3>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Prospecto</th>
+                <th>Teléfono</th>
+                <th>Ubicación</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitud in solicitudes_recientes %}
+            <tr>
+                <td>{{ solicitud.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>{{ solicitud.nombre_prospecto }}</td>
+                <td>{{ solicitud.telefono_contacto }}</td>
+                <td>{{ solicitud.colonia.nombre }}, {{ solicitud.colonia.municipio.nombre }}</td>
+                <td>
+                    {% if solicitud.estado == 'pendiente' %}
+                        <span class="badge badge-warning">{{ solicitud.estado|capitalize }}</span>
+                    {% elif solicitud.estado == 'contactado' %}
+                        <span class="badge badge-info">{{ solicitud.estado|capitalize }}</span>
+                    {% elif solicitud.estado == 'agendado' %}
+                        <span class="badge badge-success">{{ solicitud.estado|capitalize }}</span>
+                    {% else %}
+                        <span class="badge badge-secondary">{{ solicitud.estado|capitalize }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<!-- Enlaces Rápidos -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Enlaces Rápidos</h3>
+    </div>
+    <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
+        <a href="{{ url_for('municipios.list') }}" class="btn btn-secondary">Municipios</a>
+        <a href="{{ url_for('colonias.list') }}" class="btn btn-secondary">Colonias</a>
+        <a href="{{ url_for('cobertura.list') }}" class="btn btn-secondary">Cobertura</a>
+        <a href="{{ url_for('planes.list') }}" class="btn btn-secondary">Planes</a>
+        <a href="{{ url_for('admin.territorio') }}" class="btn btn-primary">Vista Territorio</a>
     </div>
 </div>
 {% endblock %}
