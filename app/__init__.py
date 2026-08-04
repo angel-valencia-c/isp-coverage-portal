@@ -78,6 +78,7 @@ def create_app(config_name=None):
     from .routes.admin.planes import planes_bp
     from .routes.admin.disponibilidad import disponibilidad_bp
     from .routes.admin.solicitudes import solicitudes_bp
+    from .routes.admin.analisis import analisis_bp
     app.register_blueprint(health_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(portal_bp)
@@ -88,6 +89,7 @@ def create_app(config_name=None):
     app.register_blueprint(planes_bp)
     app.register_blueprint(disponibilidad_bp)
     app.register_blueprint(solicitudes_bp)
+    app.register_blueprint(analisis_bp)
     
     # Manejo de errores
     @app.errorhandler(404)

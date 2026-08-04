@@ -54,6 +54,11 @@
                             Configuración
                         </a>
                     </li>
+                    <li class="sidebar-nav-item">
+                        <a href="{{ url_for('analisis.demanda') }}" class="sidebar-nav-link {% if request.endpoint and 'analisis' in request.endpoint %}active{% endif %}">
+                            Análisis
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="sidebar-footer" style="margin-top: var(--space-8); padding-top: var(--space-4); border-top: var(--border);">

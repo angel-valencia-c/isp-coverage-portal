@@ -375,6 +375,31 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 
 ---
 
+## FASE 9: Análisis de Demanda por Zona
+
+### Estado: ✅ COMPLETADA
+
+### Módulo 1: Servicio de Análisis de Demanda ✅
+- [x] Tests pasando (9/9)
+- [x] Coverage 79%
+- [x] Sin deuda técnica nueva
+
+### Resumen Fase 9
+- **Total tests:** 9 nuevos tests
+- **Tests totales:** 220 pasando (100%)
+- **Coverage general:** 78%
+- **Deuda técnica:** Sin deuda técnica nueva
+- **Archivos creados:**
+  - `app/services/analisis_demanda_service.py`
+  - `app/routes/admin/analisis.py`
+  - `app/templates/pages/admin/analisis/demanda.html`
+  - `tests/test_analisis_demanda.py`
+- **Archivos modificados:**
+  - `app/__init__.py` (registrado blueprint de análisis)
+  - `app/templates/layouts/admin.html` (agregado enlace de Análisis en sidebar)
+
+---
+
 ## Plan de Resolución
 
 ### Antes de cerrar Fase 3:
@@ -462,6 +487,7 @@ usuario = db.relationship('UsuarioAdministrativo', foreign_keys=[creado_por])
 | 2026-08-03 | Fase 6 | Formulario de Solicitud completado, DEUDA-001 y DEUDA-002 actualizadas con solicitudes_publicas_service.py | Sistema |
 | 2026-08-03 | Fase 7 | Gestión de Solicitudes completado, DEUDA-001 actualizada con gestion_solicitudes_service.py | Sistema |
 | 2026-08-03 | Fase 8 | Notas y Seguimiento completado, DEUDA-001 actualizada con notas_solicitudes_service.py, DEUDA-003 detectada | Sistema |
+| 2026-08-03 | Fase 9 | Análisis de Demanda completado, sin deuda técnica nueva | Sistema |
 
 ---
 

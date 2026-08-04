@@ -1,0 +1,207 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Análisis de Demanda{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Análisis de Demanda por Zona</h1>
+    <p class="main-subtitle">Identifica zonas con alta demanda y oportunidades de expansión</p>
+</div>
+
+<!-- Estadísticas Generales -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.total }}</div>
+        <div class="stat-label">Total Solicitudes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ demand_cobertura.con_cobertura }}</div>
+        <div class="stat-label">Con Cobertura</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ demand_cobertura.sin_cobertura }}</div>
+        <div class="stat-label">Sin Cobertura</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ demand_estado.get('pendiente', 0) }}</div>
+        <div class="stat-label">Pendientes</div>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Filtros de Análisis</h3>
+    </div>
+    <form method="GET" action="{{ url_for('analisis.demanda') }}" class="filter-form">
+        <div class="form-group">
+            <label for="municipio_id" class="form-label">Municipio</label>
+            <select id="municipio_id" name="municipio_id" class="form-input">
+                <option value="">Todos</option>
+                {% for municipio in municipios %}
+                    <option value="{{ municipio.id }}" {% if filtros.municipio_id == municipio.id %}selected{% endif %}>
+                        {{ municipio.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="estado" class="form-label">Estado</label>
+            <select id="estado" name="estado" class="form-input">
+                <option value="">Todos</option>
+                <option value="pendiente" {% if filtros.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                <option value="contactado" {% if filtros.estado == 'contactado' %}selected{% endif %}>Contactado</option>
+                <option value="agendado" {% if filtros.estado == 'agendado' %}selected{% endif %}>Agendado</option>
+                <option value="cancelado" {% if filtros.estado == 'cancelado' %}selected{% endif %}>Cancelado</option>
+                <option value="duplicado" {% if filtros.estado == 'duplicado' %}selected{% endif %}>Duplicado</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="fecha_desde" class="form-label">Fecha Desde</label>
+            <input type="date" id="fecha_desde" name="fecha_desde" class="form-input" value="{{ filtros.fecha_desde }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="fecha_hasta" class="form-label">Fecha Hasta</label>
+            <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-input" value="{{ filtros.fecha_hasta }}">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+            <a href="{{ url_for('analisis.demanda') }}" class="btn btn-secondary">Limpiar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Demanda por Municipio -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Demanda por Municipio</h3>
+    </div>
+    {% if demand_municipio %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Municipio</th>
+                    <th>Total Solicitudes</th>
+                    <th>Porcentaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in demand_municipio %}
+                <tr>
+                    <td>{{ item.municipio_nombre }}</td>
+                    <td>{{ item.total_solicitudes }}</td>
+                    <td>
+                        {% if estadisticas.total > 0 %}
+                            {{ "%.1f"|format((item.total_solicitudes / estadisticas.total) * 100) }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay datos de demanda para los filtros aplicados.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Top 10 Colonias con Mayor Demanda -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Top 10 Colonias con Mayor Demanda</h3>
+    </div>
+    {% if top_colonias %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Colonia</th>
+                    <th>Municipio</th>
+                    <th>Total Solicitudes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in top_colonias %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.colonia_nombre }}</td>
+                    <td>{{ item.municipio_nombre }}</td>
+                    <td>
+                        <span class="badge badge-info">{{ item.total_solicitudes }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay datos de demanda para los filtros aplicados.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Demanda con/sin Cobertura -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Demanda: Con vs Sin Cobertura</h3>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ demand_cobertura.con_cobertura }}</div>
+            <div class="stat-label">Solicitudes con Cobertura</div>
+            {% if demand_cobertura.total > 0 %}
+            <div class="stat-percentage">
+                {{ "%.1f"|format((demand_cobertura.con_cobertura / demand_cobertura.total) * 100) }}%
+            </div>
+            {% endif %}
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ demand_cobertura.sin_cobertura }}</div>
+            <div class="stat-label">Solicitudes sin Cobertura</div>
+            {% if demand_cobertura.total > 0 %}
+            <div class="stat-percentage">
+                {{ "%.1f"|format((demand_cobertura.sin_cobertura / demand_cobertura.total) * 100) }}%
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if demand_cobertura.sin_cobertura > 0 %}
+    <div class="alert alert-warning">
+        <strong>Oportunidad de Expansión:</strong> Hay {{ demand_cobertura.sin_cobertura }} solicitudes en zonas sin cobertura. 
+        Considera expandir la red a estas zonas para captar más clientes.
+    </div>
+    {% endif %}
+</div>
+
+<!-- Distribución por Estado -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Distribución por Estado</h3>
+    </div>
+    {% if demand_estado %}
+    <div class="stats-grid">
+        {% for estado, total in demand_estado.items() %}
+        <div class="stat-card">
+            <div class="stat-value">{{ total }}</div>
+            <div class="stat-label">{{ estado|capitalize }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay datos de demanda para los filtros aplicados.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
