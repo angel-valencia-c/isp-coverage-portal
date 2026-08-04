@@ -70,6 +70,7 @@ def create_app(config_name=None):
     # Registrar blueprints
     from .routes.health import health_bp
     from .routes.auth import auth_bp
+    from .routes.portal import portal_bp
     from .routes.admin import admin_bp
     from .routes.admin.municipios import municipios_bp
     from .routes.admin.colonias import colonias_bp
@@ -78,21 +79,13 @@ def create_app(config_name=None):
     from .routes.admin.disponibilidad import disponibilidad_bp
     app.register_blueprint(health_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(portal_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(municipios_bp)
     app.register_blueprint(colonias_bp)
     app.register_blueprint(cobertura_bp)
     app.register_blueprint(planes_bp)
     app.register_blueprint(disponibilidad_bp)
-    
-    # Ruta raíz
-    @app.route('/')
-    def index():
-        return {
-            'status': 'ok',
-            'message': 'Portal de Verificación de Cobertura - Enlaces Costa Grande',
-            'version': '1.0.0'
-        }
     
     # Manejo de errores
     @app.errorhandler(404)

@@ -52,7 +52,7 @@ class TestHealthEndpoint:
 
 
 class TestRootEndpoint:
-    """Tests para el endpoint raíz"""
+    """Tests para el endpoint raíz (portal público)"""
     
     def test_root_endpoint_returns_200(self, client):
         """
@@ -61,38 +61,20 @@ class TestRootEndpoint:
         response = client.get('/')
         assert response.status_code == 200
     
-    def test_root_endpoint_returns_json(self, client):
+    def test_root_endpoint_returns_html(self, client):
         """
-        Test: El endpoint / debe retornar JSON
+        Test: El endpoint / debe retornar HTML (portal público)
         """
         response = client.get('/')
-        assert response.content_type == 'application/json'
+        assert response.content_type == 'text/html; charset=utf-8'
     
-    def test_root_endpoint_has_status_field(self, client):
+    def test_root_endpoint_has_portal_content(self, client):
         """
-        Test: La respuesta debe incluir el campo 'status'
-        """
-        response = client.get('/')
-        data = response.get_json()
-        assert 'status' in data
-        assert data['status'] == 'ok'
-    
-    def test_root_endpoint_has_message_field(self, client):
-        """
-        Test: La respuesta debe incluir el campo 'message'
+        Test: La respuesta debe incluir contenido del portal
         """
         response = client.get('/')
-        data = response.get_json()
-        assert 'message' in data
-        assert 'Enlaces Costa Grande' in data['message']
-    
-    def test_root_endpoint_has_version_field(self, client):
-        """
-        Test: La respuesta debe incluir el campo 'version'
-        """
-        response = client.get('/')
-        data = response.get_json()
-        assert 'version' in data
+        assert b'Enlaces Costa Grande' in response.data
+        assert b'Verifica tu Cobertura' in response.data
 
 
 class TestErrorHandling:

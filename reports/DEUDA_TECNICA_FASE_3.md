@@ -19,13 +19,14 @@ Este documento registra warnings de deprecación, observaciones técnicas y deud
 
 **Severidad:** BAJA  
 **Tipo:** Deprecation Warning  
-**Detectado en:** Módulo 2, 3, 4, 5, 6  
+**Detectado en:** Módulo 2, 3, 4, 5, 6, Fase 4  
 **Archivos afectados:**
 - `app/services/municipio_service.py` (líneas 105, 136, 162)
 - `app/services/colonia_service.py` (líneas 89, 134, 176)
 - `app/services/cobertura_service.py` (líneas 39, 96)
 - `app/services/plan_service.py` (líneas 92, 118, 165, 191)
 - `app/services/disponibilidad_plan_service.py` (líneas 41, 46, 124, 150)
+- `app/services/busqueda_publica_service.py` (línea 68)
 - `tests/test_municipios.py` (líneas 223, 238)
 - `tests/test_colonias.py` (líneas 317, 332)
 - `tests/test_cobertura.py` (línea 220)
@@ -216,6 +217,39 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 
 ---
 
+## FASE 4: Portal Público - Búsqueda de Cobertura
+
+### Estado: ✅ COMPLETADA
+
+### Módulo 1: Servicio de Búsqueda Pública ✅
+- [x] Tests pasando (12/12)
+- [x] Coverage > 90%
+- [x] Sin deuda técnica nueva
+- [x] DEUDA-001 actualizada (agregado busqueda_publica_service.py)
+
+### Módulo 2: Rutas del Portal Público ✅
+- [x] Tests pasando (8/8)
+- [x] Coverage 100%
+- [x] Sin deuda técnica nueva
+- [x] Tests de health actualizados para reflejar nuevo comportamiento
+
+### Resumen Fase 4
+- **Total tests:** 20 nuevos tests (12 servicio + 8 rutas)
+- **Tests totales:** 169 pasando (100%)
+- **Coverage general:** 78%
+- **Deuda técnica:** DEUDA-001 actualizada con busqueda_publica_service.py
+- **Archivos creados:**
+  - `app/services/busqueda_publica_service.py`
+  - `app/routes/portal.py`
+  - `app/templates/layouts/public.html`
+  - `app/templates/pages/public/index.html`
+  - `public/css/public.css`
+  - `public/js/portal.js`
+  - `tests/test_busqueda_publica.py`
+  - `tests/test_portal_routes.py`
+
+---
+
 ## Plan de Resolución
 
 ### Antes de cerrar Fase 3:
@@ -262,6 +296,7 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 | 2026-08-03 | 8 | Componentes CSS completados, sin deuda técnica nueva | Sistema |
 | 2026-08-03 | 9 | Sistema CSS verificado y completo, sin deuda técnica nueva | Sistema |
 | 2026-08-03 | 10 | Fase 3 completada, deuda técnica documentada, reporte final generado | Sistema |
+| 2026-08-03 | Fase 4 | Portal Público completado, DEUDA-001 actualizada con busqueda_publica_service.py | Sistema |
 
 ---
 

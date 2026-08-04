@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Enlaces Costa Grande{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tokens.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layouts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="public-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1 class="logo-text">Enlaces Costa Grande</h1>
+                </div>
+                <nav class="header-nav">
+                    <a href="{{ url_for('portal.index') }}" class="nav-link">Inicio</a>
+                    <a href="{{ url_for('auth.login') }}" class="nav-link nav-link-admin">Admin</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="public-main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container">
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="public-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Enlaces Costa Grande. Todos los derechos reservados.</p>
+                <p class="footer-links">
+                    <a href="#">Términos y Condiciones</a> | 
+                    <a href="#">Aviso de Privacidad</a> | 
+                    <a href="#">Contacto</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

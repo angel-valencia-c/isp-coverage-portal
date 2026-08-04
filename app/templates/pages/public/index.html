@@ -1,0 +1,84 @@
+{% extends "layouts/public.html" %}
+
+{% block title %}Verifica tu Cobertura - Enlaces Costa Grande{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Internet de Alta Velocidad</h1>
+            <p class="hero-subtitle">Verifica si tu zona tiene cobertura disponible</p>
+        </div>
+    </div>
+</section>
+
+<section class="search-section">
+    <div class="container">
+        <div class="search-card">
+            <h2 class="search-title">Busca tu Ubicación</h2>
+            <p class="search-description">Selecciona tu municipio y colonia para verificar la disponibilidad</p>
+            
+            <form id="searchForm" class="search-form">
+                <div class="form-group">
+                    <label for="municipio" class="form-label">Municipio</label>
+                    <select id="municipio" name="municipio" class="form-input" required>
+                        <option value="">Selecciona un municipio</option>
+                        {% for municipio in municipios %}
+                            <option value="{{ municipio.id }}">{{ municipio.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="colonia" class="form-label">Colonia / Comunidad</label>
+                    <div class="search-input-wrapper">
+                        <input 
+                            type="text" 
+                            id="colonia-search" 
+                            class="form-input" 
+                            placeholder="Escribe para buscar..."
+                            autocomplete="off"
+                        >
+                        <input type="hidden" id="colonia" name="colonia">
+                        <div id="colonia-suggestions" class="suggestions-dropdown"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    Verificar Cobertura
+                </button>
+            </form>
+
+            <div id="result" class="result-container" style="display: none;">
+                <!-- El resultado se insertará aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title">Alta Velocidad</h3>
+                <p class="feature-description">Conexiones de hasta 500 Mbps para tu hogar o negocio</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📞</div>
+                <h3 class="feature-title">Soporte 24/7</h3>
+                <p class="feature-description">Atención técnica disponible todos los días del año</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3 class="feature-title">Precios Competitivos</h3>
+                <p class="feature-description">Planes accesibles con la mejor relación calidad-precio</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+{% endblock %}
