@@ -212,3 +212,24 @@
     background-color: var(--color-accent-light);
     color: var(--color-accent);
 }
+
+.badge-secondary {
+    background-color: var(--color-surface-muted);
+    color: var(--color-text-secondary);
+}
+
+/* Textos de ayuda */
+.form-help {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+/* Textos secundarios */
+.text-muted {
+    color: var(--color-text-muted);
+}
+
+.text-secondary {
+    color: var(--color-text-secondary);
+}
