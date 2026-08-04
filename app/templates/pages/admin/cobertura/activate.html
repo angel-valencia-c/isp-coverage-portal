@@ -1,0 +1,56 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Activar Cobertura{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Activar Cobertura</h1>
+    <p class="main-subtitle">Activar cobertura para la colonia {{ colonia.nombre }}</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Información de la Colonia</h3>
+    </div>
+    <div style="margin-bottom: var(--space-6);">
+        <p><strong>Municipio:</strong> {{ colonia.municipio.nombre }}</p>
+        <p><strong>Colonia:</strong> {{ colonia.nombre }}</p>
+        <p><strong>Tipo:</strong> {{ colonia.tipo|capitalize }}</p>
+    </div>
+    
+    <form method="POST" action="{{ url_for('cobertura.activate', colonia_id=colonia.id) }}">
+        <div class="form-field">
+            <label for="tipo_cobertura" class="form-label">Tipo de Cobertura *</label>
+            <select id="tipo_cobertura" name="tipo_cobertura" class="form-input" required>
+                <option value="total" selected>Total - Cobertura completa</option>
+                <option value="parcial">Parcial - Cobertura limitada</option>
+                <option value="condicional">Condicional - Sujeta a condiciones</option>
+                <option value="planificada">Planificada - Próximamente</option>
+            </select>
+            <p class="form-help" style="margin-top: var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted);">
+                En V1, solo se usa "Total" y "Planificada". Los otros tipos están preparados para futuras versiones.
+            </p>
+        </div>
+        
+        <div class="form-field">
+            <label for="notas" class="form-label">Notas (opcional)</label>
+            <textarea 
+                id="notas" 
+                name="notas" 
+                class="form-input" 
+                rows="4"
+                placeholder="Información adicional sobre la cobertura..."
+            ></textarea>
+        </div>
+        
+        <div style="display: flex; gap: var(--space-4); margin-top: var(--space-8);">
+            <button type="submit" class="btn btn-primary">
+                Activar Cobertura
+            </button>
+            <a href="{{ url_for('cobertura.list') }}" class="btn btn-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

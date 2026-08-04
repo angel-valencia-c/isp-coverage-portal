@@ -73,11 +73,13 @@ def create_app(config_name=None):
     from .routes.admin import admin_bp
     from .routes.admin.municipios import municipios_bp
     from .routes.admin.colonias import colonias_bp
+    from .routes.admin.cobertura import cobertura_bp
     app.register_blueprint(health_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(municipios_bp)
     app.register_blueprint(colonias_bp)
+    app.register_blueprint(cobertura_bp)
     
     # Ruta raíz
     @app.route('/')

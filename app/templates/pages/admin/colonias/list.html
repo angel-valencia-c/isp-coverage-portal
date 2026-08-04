@@ -72,6 +72,15 @@
                     <a href="{{ url_for('colonias.edit', colonia_id=colonia.id) }}" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
                         Editar
                     </a>
+                    {% if not colonia.cobertura %}
+                        <a href="{{ url_for('cobertura.activate', colonia_id=colonia.id) }}" class="btn btn-primary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                            Activar Cobertura
+                        </a>
+                    {% elif colonia.cobertura and not colonia.cobertura.activa %}
+                        <a href="{{ url_for('cobertura.activate', colonia_id=colonia.id) }}" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                            Reactivar Cobertura
+                        </a>
+                    {% endif %}
                     {% if colonia.activo %}
                         <form method="POST" action="{{ url_for('colonias.deactivate', colonia_id=colonia.id) }}" style="display: inline;">
                             <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);" onclick="return confirm('¿Estás seguro de desactivar esta colonia?')">

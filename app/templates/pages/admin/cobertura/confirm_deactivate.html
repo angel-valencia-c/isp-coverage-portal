@@ -1,0 +1,35 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Confirmar Desactivación{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Confirmar Desactivación de Cobertura</h1>
+    <p class="main-subtitle">Esta colonia tiene solicitudes pendientes</p>
+</div>
+
+<div class="card">
+    <div class="alert alert-warning">
+        <strong>Atención:</strong> Esta colonia tiene <strong>{{ solicitudes_pendientes }} solicitud(es) pendiente(s)</strong>.
+        <br><br>
+        Si desactivas la cobertura, los prospectos con solicitudes pendientes no podrán ver los planes disponibles 
+        hasta que se reactiven la cobertura.
+    </div>
+    
+    <div style="margin-top: var(--space-6);">
+        <p><strong>¿Qué deseas hacer?</strong></p>
+    </div>
+    
+    <div style="display: flex; gap: var(--space-4); margin-top: var(--space-8);">
+        <form method="POST" action="{{ url_for('cobertura.deactivate', colonia_id=colonia_id) }}" style="display: inline;">
+            <input type="hidden" name="forzar" value="true">
+            <button type="submit" class="btn btn-primary">
+                Sí, desactivar cobertura
+            </button>
+        </form>
+        <a href="{{ url_for('cobertura.list') }}" class="btn btn-secondary">
+            No, cancelar
+        </a>
+    </div>
+</div>
+{% endblock %}

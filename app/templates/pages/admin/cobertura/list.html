@@ -1,0 +1,121 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Cobertura{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Cobertura</h1>
+    <p class="main-subtitle">Gestión de cobertura por colonia</p>
+</div>
+
+<div class="card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="card-title">Lista de Coberturas</h3>
+        <div>
+            <a href="{{ url_for('cobertura.list', incluir_inactivas='true' if not incluir_inactivas else 'false', municipio_id=municipio_id or '') }}" class="btn btn-secondary">
+                {% if incluir_inactivas %}Ocultar Inactivas{% else %}Mostrar Inactivas{% endif %}
+            </a>
+        </div>
+    </div>
+    
+    <!-- Filtro por municipio -->
+    <div style="margin-bottom: var(--space-6); padding: var(--space-4); background-color: var(--color-surface-alt); border-radius: var(--radius-sm);">
+        <form method="GET" action="{{ url_for('cobertura.list') }}" style="display: flex; gap: var(--space-4); align-items: end;">
+            <div style="flex: 1;">
+                <label for="municipio_id" class="form-label">Filtrar por Municipio</label>
+                <select id="municipio_id" name="municipio_id" class="form-input">
+                    <option value="">Todos los municipios</option>
+                    {% for municipio in municipios %}
+                        <option value="{{ municipio.id }}" {% if municipio_id == municipio.id %}selected{% endif %}>
+                            {{ municipio.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            {% if municipio_id %}
+                <a href="{{ url_for('cobertura.list') }}" class="btn btn-secondary">Limpiar</a>
+            {% endif %}
+        </form>
+    </div>
+    
+    {% if coberturas_info %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Municipio</th>
+                <th>Colonia</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Solicitudes Pendientes</th>
+                <th>Notas</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for info in coberturas_info %}
+            <tr>
+                <td>{{ info.municipio.nombre }}</td>
+                <td>{{ info.colonia.nombre }}</td>
+                <td>{{ info.cobertura.tipo_cobertura|capitalize }}</td>
+                <td>
+                    {% if info.cobertura.activa %}
+                        <span class="badge badge-success">Activa</span>
+                    {% else %}
+                        <span class="badge badge-error">Inactiva</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if info.solicitudes_pendientes > 0 %}
+                        <span class="badge badge-warning">{{ info.solicitudes_pendientes }}</span>
+                    {% else %}
+                        <span class="text-muted">0</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if info.cobertura.notas %}
+                        <span title="{{ info.cobertura.notas }}">{{ info.cobertura.notas[:50] }}{% if info.cobertura.notas|length > 50 %}...{% endif %}</span>
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if info.cobertura.activa %}
+                        <form method="POST" action="{{ url_for('cobertura.deactivate', colonia_id=info.colonia.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                                Desactivar
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{{ url_for('cobertura.activate', colonia_id=info.colonia.id) }}" class="btn btn-primary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                            Reactivar
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
+        {% if municipio_id %}
+            No hay coberturas registradas en este municipio.
+        {% else %}
+            No hay coberturas registradas. Activa cobertura desde la sección de Colonias.
+        {% endif %}
+    </p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Colonias sin Cobertura</h3>
+    </div>
+    <p style="margin-bottom: var(--space-4);">
+        Las siguientes colonias no tienen cobertura activa. Puedes activar cobertura desde la sección de Colonias.
+    </p>
+    <a href="{{ url_for('colonias.list') }}" class="btn btn-secondary">
+        Ir a Colonias
+    </a>
+</div>
+{% endblock %}
