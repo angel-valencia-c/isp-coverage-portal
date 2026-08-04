@@ -233,3 +233,197 @@
 .text-secondary {
     color: var(--color-text-secondary);
 }
+
+/* ========================================
+   ESTADÍSTICAS Y DASHBOARD
+   ======================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.stat-card {
+    background-color: var(--color-surface);
+    border: var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    text-align: center;
+}
+
+.stat-value {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+}
+
+.stat-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ========================================
+   FORMULARIOS DE FILTRO
+   ======================================== */
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-4);
+    align-items: end;
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+/* ========================================
+   TABLAS RESPONSIVAS
+   ======================================== */
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th,
+.table td {
+    white-space: nowrap;
+}
+
+/* ========================================
+   BADGES DE ESTADO
+   ======================================== */
+
+.badge-pendiente {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.badge-contactado {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent);
+}
+
+.badge-agendado {
+    background-color: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.badge-cancelado {
+    background-color: var(--color-error-light);
+    color: var(--color-error);
+}
+
+.badge-duplicado {
+    background-color: var(--color-surface-muted);
+    color: var(--color-text-secondary);
+}
+
+/* ========================================
+   ESTADOS VACÍOS
+   ======================================== */
+
+.empty-state {
+    text-align: center;
+    padding: var(--space-12);
+    color: var(--color-text-muted);
+}
+
+/* ========================================
+   DETALLES Y ACCIONES
+   ======================================== */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-3) 0;
+    border-bottom: var(--border);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: var(--font-medium);
+    color: var(--color-text-secondary);
+}
+
+.detail-value {
+    font-weight: var(--font-semibold);
+    color: var(--color-text);
+    text-align: right;
+}
+
+.action-section {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-6);
+    border-bottom: var(--border);
+}
+
+.action-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.action-section h4 {
+    margin-bottom: var(--space-4);
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+}
+
+.inline-form {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+}
+
+.inline-form .form-input {
+    flex: 1;
+    max-width: 300px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .inline-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .inline-form .form-input {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,171 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Detalle de Solicitud #{{ solicitud.id }}{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Detalle de Solicitud #{{ solicitud.id }}</h1>
+    <p class="main-subtitle">Información completa de la solicitud</p>
+</div>
+
+<div class="detail-grid">
+    <!-- Información del Prospecto -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Información del Prospecto</h3>
+        </div>
+        <div class="detail-content">
+            <div class="detail-item">
+                <span class="detail-label">Nombre:</span>
+                <span class="detail-value">{{ solicitud.nombre_prospecto }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Teléfono:</span>
+                <span class="detail-value">
+                    <a href="tel:{{ solicitud.telefono_contacto }}">{{ solicitud.telefono_contacto }}</a>
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Dirección:</span>
+                <span class="detail-value">{{ solicitud.direccion_especifica or 'No especificada' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ubicación -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Ubicación</h3>
+        </div>
+        <div class="detail-content">
+            <div class="detail-item">
+                <span class="detail-label">Municipio:</span>
+                <span class="detail-value">{{ solicitud.colonia.municipio.nombre if solicitud.colonia else '-' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Colonia:</span>
+                <span class="detail-value">{{ solicitud.colonia.nombre if solicitud.colonia else '-' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan y Cotización -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Plan y Cotización</h3>
+        </div>
+        <div class="detail-content">
+            <div class="detail-item">
+                <span class="detail-label">Plan:</span>
+                <span class="detail-value">
+                    {% if solicitud.plan %}
+                        {{ solicitud.plan.nombre }}
+                    {% else %}
+                        <span class="badge badge-secondary">Sin plan (Lead)</span>
+                    {% endif %}
+                </span>
+            </div>
+            {% if solicitud.plan %}
+            <div class="detail-item">
+                <span class="detail-label">Velocidad:</span>
+                <span class="detail-value">{{ solicitud.plan.velocidad_descarga }} Mbps ↓ / {{ solicitud.plan.velocidad_subida }} Mbps ↑</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Costo de Instalación:</span>
+                <span class="detail-value">${{ "%.2f"|format(solicitud.costo_instalacion_cotizado) if solicitud.costo_instalacion_cotizado else '-' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Precio Mensual:</span>
+                <span class="detail-value">${{ "%.2f"|format(solicitud.precio_mensual_cotizado) if solicitud.precio_mensual_cotizado else '-' }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Estado y Seguimiento -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Estado y Seguimiento</h3>
+        </div>
+        <div class="detail-content">
+            <div class="detail-item">
+                <span class="detail-label">Estado Actual:</span>
+                <span class="detail-value">
+                    <span class="badge badge-{{ solicitud.estado }}">{{ solicitud.estado|capitalize }}</span>
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Origen:</span>
+                <span class="detail-value">{{ solicitud.origen|capitalize }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Tipo:</span>
+                <span class="detail-value">
+                    {% if solicitud.tipo == 'solicitud_cobertura' %}
+                        Solicitud con Cobertura
+                    {% else %}
+                        Lead sin Cobertura
+                    {% endif %}
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Fecha de Creación:</span>
+                <span class="detail-value">{{ solicitud.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</span>
+            </div>
+            {% if solicitud.solicitud_duplicada_de %}
+            <div class="detail-item">
+                <span class="detail-label">Duplicada de:</span>
+                <span class="detail-value">
+                    <a href="{{ url_for('solicitudes.detalle_solicitud', solicitud_id=solicitud.solicitud_duplicada_de) }}">
+                        Solicitud #{{ solicitud.solicitud_duplicada_de }}
+                    </a>
+                </span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Acciones -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Acciones</h3>
+    </div>
+    
+    <!-- Cambiar Estado -->
+    <div class="action-section">
+        <h4>Cambiar Estado</h4>
+        <form method="POST" action="{{ url_for('solicitudes.cambiar_estado', solicitud_id=solicitud.id) }}" class="inline-form">
+            <select name="estado" class="form-input" required>
+                <option value="">Seleccionar estado...</option>
+                <option value="pendiente" {% if solicitud.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                <option value="contactado" {% if solicitud.estado == 'contactado' %}selected{% endif %}>Contactado</option>
+                <option value="agendado" {% if solicitud.estado == 'agendado' %}selected{% endif %}>Agendado</option>
+                <option value="cancelado" {% if solicitud.estado == 'cancelado' %}selected{% endif %}>Cancelado</option>
+                <option value="duplicado" {% if solicitud.estado == 'duplicado' %}selected{% endif %}>Duplicado</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+        </form>
+    </div>
+    
+    <!-- Marcar como Duplicada -->
+    {% if solicitud.estado != 'duplicado' %}
+    <div class="action-section">
+        <h4>Marcar como Duplicada</h4>
+        <form method="POST" action="{{ url_for('solicitudes.marcar_duplicada', solicitud_id=solicitud.id) }}" class="inline-form">
+            <input type="number" name="solicitud_original_id" class="form-input" placeholder="ID de solicitud original" required min="1">
+            <button type="submit" class="btn btn-secondary" onclick="return confirm('¿Estás seguro de marcar esta solicitud como duplicada?')">
+                Marcar como Duplicada
+            </button>
+        </form>
+    </div>
+    {% endif %}
+    
+    <!-- Volver -->
+    <div class="action-section">
+        <a href="{{ url_for('solicitudes.listar_solicitudes') }}" class="btn btn-secondary">
+            Volver a la Lista
+        </a>
+    </div>
+</div>
+{% endblock %}

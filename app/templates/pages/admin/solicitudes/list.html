@@ -1,0 +1,149 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Gestión de Solicitudes{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Gestión de Solicitudes</h1>
+    <p class="main-subtitle">Administra las solicitudes de instalación recibidas</p>
+</div>
+
+<!-- Estadísticas -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.total }}</div>
+        <div class="stat-label">Total Solicitudes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.por_estado.pendiente }}</div>
+        <div class="stat-label">Pendientes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.por_estado.contactado }}</div>
+        <div class="stat-label">Contactados</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.por_estado.agendado }}</div>
+        <div class="stat-label">Agendados</div>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Filtros</h3>
+    </div>
+    <form method="GET" action="{{ url_for('solicitudes.listar_solicitudes') }}" class="filter-form">
+        <div class="form-group">
+            <label for="estado" class="form-label">Estado</label>
+            <select id="estado" name="estado" class="form-input">
+                <option value="">Todos</option>
+                <option value="pendiente" {% if filtros.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                <option value="contactado" {% if filtros.estado == 'contactado' %}selected{% endif %}>Contactado</option>
+                <option value="agendado" {% if filtros.estado == 'agendado' %}selected{% endif %}>Agendado</option>
+                <option value="cancelado" {% if filtros.estado == 'cancelado' %}selected{% endif %}>Cancelado</option>
+                <option value="duplicado" {% if filtros.estado == 'duplicado' %}selected{% endif %}>Duplicado</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="fecha_desde" class="form-label">Fecha Desde</label>
+            <input type="date" id="fecha_desde" name="fecha_desde" class="form-input" value="{{ filtros.fecha_desde }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="fecha_hasta" class="form-label">Fecha Hasta</label>
+            <input type="date" id="fecha_hasta" name="fecha_hasta" class="form-input" value="{{ filtros.fecha_hasta }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="ordenar_por" class="form-label">Ordenar por</label>
+            <select id="ordenar_por" name="ordenar_por" class="form-input">
+                <option value="fecha_creacion" {% if filtros.ordenar_por == 'fecha_creacion' %}selected{% endif %}>Fecha de Creación</option>
+                <option value="nombre_prospecto" {% if filtros.ordenar_por == 'nombre_prospecto' %}selected{% endif %}>Nombre</option>
+                <option value="estado" {% if filtros.ordenar_por == 'estado' %}selected{% endif %}>Estado</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="orden" class="form-label">Orden</label>
+            <select id="orden" name="orden" class="form-input">
+                <option value="desc" {% if filtros.orden == 'desc' %}selected{% endif %}>Descendente</option>
+                <option value="asc" {% if filtros.orden == 'asc' %}selected{% endif %}>Ascendente</option>
+            </select>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+            <a href="{{ url_for('solicitudes.listar_solicitudes') }}" class="btn btn-secondary">Limpiar</a>
+            <a href="{{ url_for('solicitudes.exportar_csv', estado=filtros.estado, fecha_desde=filtros.fecha_desde, fecha_hasta=filtros.fecha_hasta) }}" class="btn btn-secondary">
+                Exportar CSV
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Tabla de Solicitudes -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Solicitudes ({{ solicitudes|length }})</h3>
+    </div>
+    
+    {% if solicitudes %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Ubicación</th>
+                    <th>Plan</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in solicitudes %}
+                <tr>
+                    <td>#{{ solicitud.id }}</td>
+                    <td>{{ solicitud.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>{{ solicitud.nombre_prospecto }}</td>
+                    <td>{{ solicitud.telefono_contacto }}</td>
+                    <td>
+                        {% if solicitud.colonia %}
+                            {{ solicitud.colonia.nombre }}, {{ solicitud.colonia.municipio.nombre }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if solicitud.plan %}
+                            {{ solicitud.plan.nombre }}
+                        {% else %}
+                            <span class="badge badge-secondary">Sin plan</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ solicitud.estado }}">
+                            {{ solicitud.estado|capitalize }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('solicitudes.detalle_solicitud', solicitud_id=solicitud.id) }}" class="btn btn-secondary btn-sm">
+                            Ver Detalle
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No se encontraron solicitudes con los filtros aplicados.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
