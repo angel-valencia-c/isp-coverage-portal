@@ -1,0 +1,80 @@
+{% extends "layouts/public.html" %}
+
+{% block title %}Sin Cobertura - Enlaces Costa Grande{% endblock %}
+
+{% block content %}
+<section class="no-coverage-hero">
+    <div class="container">
+        <div class="no-coverage-content">
+            <div class="no-coverage-icon">❌</div>
+            <h1 class="no-coverage-title">Sin cobertura disponible</h1>
+            <p class="no-coverage-subtitle">
+                Lo sentimos, tu zona aún no cuenta con cobertura de Enlaces Costa Grande
+            </p>
+            <p class="no-coverage-location">
+                <strong>{{ colonia.nombre }}</strong>, {{ colonia.municipio.nombre }}
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="no-coverage-section">
+    <div class="container">
+        <div class="no-coverage-card">
+            <h2 class="no-coverage-card-title">¿Qué puedes hacer?</h2>
+            
+            <div class="no-coverage-options">
+                <div class="option-card">
+                    <div class="option-icon">📞</div>
+                    <h3 class="option-title">Contáctanos</h3>
+                    <p class="option-description">
+                        Llama a nuestro equipo de ventas para más información sobre 
+                        la expansión de cobertura a tu zona.
+                    </p>
+                    <a href="tel:+527441234567" class="btn btn-secondary">
+                        Llamar: 744 123 4567
+                    </a>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">📧</div>
+                    <h3 class="option-title">Déjanos tus datos</h3>
+                    <p class="option-description">
+                        Registra tu interés y te notificaremos cuando haya cobertura 
+                        disponible en tu zona.
+                    </p>
+                    <p class="option-note">
+                        Próximamente podrás dejar tus datos aquí.
+                    </p>
+                    <button class="btn btn-secondary" disabled>
+                        Próximamente
+                    </button>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">🔍</div>
+                    <h3 class="option-title">Busca otra ubicación</h3>
+                    <p class="option-description">
+                        Si tienes otra ubicación, puedes verificar si tiene cobertura disponible.
+                    </p>
+                    <a href="{{ url_for('portal.index') }}" class="btn btn-primary">
+                        Buscar otra ubicación
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-coverage-info">
+            <h3>Estamos trabajando para llegar a tu zona</h3>
+            <p>
+                En Enlaces Costa Grande estamos expandiendo constantemente nuestra red 
+                para llevar internet de alta velocidad a más hogares y negocios.
+            </p>
+            <p>
+                Tu interés nos ayuda a priorizar las zonas de expansión. 
+                ¡Gracias por considerarnos!
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

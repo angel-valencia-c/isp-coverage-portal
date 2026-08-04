@@ -19,7 +19,7 @@ Este documento registra warnings de deprecación, observaciones técnicas y deud
 
 **Severidad:** BAJA  
 **Tipo:** Deprecation Warning  
-**Detectado en:** Módulo 2, 3, 4, 5, 6, Fase 4  
+**Detectado en:** Módulo 2, 3, 4, 5, 6, Fase 4, Fase 5  
 **Archivos afectados:**
 - `app/services/municipio_service.py` (líneas 105, 136, 162)
 - `app/services/colonia_service.py` (líneas 89, 134, 176)
@@ -27,6 +27,7 @@ Este documento registra warnings de deprecación, observaciones técnicas y deud
 - `app/services/plan_service.py` (líneas 92, 118, 165, 191)
 - `app/services/disponibilidad_plan_service.py` (líneas 41, 46, 124, 150)
 - `app/services/busqueda_publica_service.py` (línea 68)
+- `app/services/planes_publicos_service.py` (línea 89)
 - `tests/test_municipios.py` (líneas 223, 238)
 - `tests/test_colonias.py` (líneas 317, 332)
 - `tests/test_cobertura.py` (línea 220)
@@ -250,6 +251,40 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 
 ---
 
+## FASE 5: Portal Público - Planes y Cotización
+
+### Estado: ✅ COMPLETADA
+
+### Módulo 1: Servicio de Planes Públicos ✅
+- [x] Tests pasando (9/9)
+- [x] Coverage > 95%
+- [x] Sin deuda técnica nueva
+- [x] DEUDA-001 actualizada (agregado planes_publicos_service.py)
+
+### Módulo 2: Rutas de Planes del Portal ✅
+- [x] Tests pasando (5/5)
+- [x] Coverage 100% en rutas del portal
+- [x] Sin deuda técnica nueva
+
+### Resumen Fase 5
+- **Total tests:** 14 nuevos tests (9 servicio + 5 rutas)
+- **Tests totales:** 183 pasando (100%)
+- **Coverage general:** 79%
+- **Deuda técnica:** DEUDA-001 actualizada con planes_publicos_service.py
+- **Archivos creados:**
+  - `app/services/planes_publicos_service.py`
+  - `app/templates/pages/public/planes.html`
+  - `app/templates/pages/public/sin_cobertura.html`
+  - `public/js/planes.js`
+  - `tests/test_planes_publicos.py`
+  - `tests/test_planes_routes.py`
+- **Archivos modificados:**
+  - `app/routes/portal.py` (agregadas rutas de planes y cotización)
+  - `public/css/public.css` (agregados estilos para planes y sin cobertura)
+  - `public/js/portal.js` (actualizado para redirigir a planes)
+
+---
+
 ## Plan de Resolución
 
 ### Antes de cerrar Fase 3:
@@ -297,6 +332,7 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 | 2026-08-03 | 9 | Sistema CSS verificado y completo, sin deuda técnica nueva | Sistema |
 | 2026-08-03 | 10 | Fase 3 completada, deuda técnica documentada, reporte final generado | Sistema |
 | 2026-08-03 | Fase 4 | Portal Público completado, DEUDA-001 actualizada con busqueda_publica_service.py | Sistema |
+| 2026-08-03 | Fase 5 | Planes y Cotización completado, DEUDA-001 actualizada con planes_publicos_service.py | Sistema |
 
 ---
 

@@ -1,0 +1,122 @@
+{% extends "layouts/public.html" %}
+
+{% block title %}Planes Disponibles - Enlaces Costa Grande{% endblock %}
+
+{% block content %}
+<section class="plans-hero">
+    <div class="container">
+        <div class="plans-hero-content">
+            <h1 class="plans-hero-title">¡Excelentes noticias!</h1>
+            <p class="plans-hero-subtitle">Tu zona tiene cobertura disponible</p>
+            <p class="plans-hero-location">
+                <strong>{{ colonia.nombre }}</strong>, {{ colonia.municipio.nombre }}
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="plans-section">
+    <div class="container">
+        <div class="plans-header">
+            <h2 class="plans-title">Elige tu Plan de Internet</h2>
+            <p class="plans-description">Selecciona el plan que mejor se adapte a tus necesidades</p>
+        </div>
+
+        {% if planes_info %}
+        <div class="plans-grid">
+            {% for plan_info in planes_info %}
+            <div class="plan-card {% if plan_info.plan.destacado %}plan-featured{% endif %}">
+                {% if plan_info.plan.destacado %}
+                <div class="plan-badge">Más Popular</div>
+                {% endif %}
+                
+                <div class="plan-header">
+                    <h3 class="plan-name">{{ plan_info.plan.nombre }}</h3>
+                    {% if plan_info.plan.descripcion %}
+                    <p class="plan-description">{{ plan_info.plan.descripcion }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="plan-speeds">
+                    <div class="speed-item">
+                        <span class="speed-icon">↓</span>
+                        <span class="speed-value">{{ plan_info.plan.velocidad_descarga }} Mbps</span>
+                        <span class="speed-label">Descarga</span>
+                    </div>
+                    <div class="speed-item">
+                        <span class="speed-icon">↑</span>
+                        <span class="speed-value">{{ plan_info.plan.velocidad_subida }} Mbps</span>
+                        <span class="speed-label">Subida</span>
+                    </div>
+                </div>
+
+                <div class="plan-price">
+                    <div class="price-monthly">
+                        <span class="price-currency">$</span>
+                        <span class="price-amount">{{ "%.0f"|format(plan_info.precio_mensual) }}</span>
+                        <span class="price-period">/mes</span>
+                    </div>
+                    <div class="price-installation">
+                        Instalación: ${{ "%.0f"|format(plan_info.costo_instalacion) }}
+                    </div>
+                </div>
+
+                <div class="plan-features">
+                    <ul class="features-list">
+                        <li>✓ Internet de alta velocidad</li>
+                        <li>✓ WiFi router incluido</li>
+                        <li>✓ Soporte técnico 24/7</li>
+                        <li>✓ Sin límite de datos</li>
+                    </ul>
+                </div>
+
+                <button 
+                    class="btn btn-primary btn-full plan-select-btn"
+                    data-plan-id="{{ plan_info.plan.id }}"
+                    data-plan-name="{{ plan_info.plan.nombre }}"
+                    data-costo-instalacion="{{ plan_info.costo_instalacion }}"
+                    data-precio-mensual="{{ plan_info.precio_mensual }}"
+                >
+                    Seleccionar Plan
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-plans-message">
+            <p>No hay planes disponibles en este momento para tu zona.</p>
+            <p>Por favor contacta a nuestro equipo de ventas para más información.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Modal de Cotización -->
+<div id="cotizacionModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Cotización Estimada</h3>
+            <button class="modal-close" onclick="cerrarModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="cotizacionDetails">
+                <!-- Los detalles se insertarán aquí dinámicamente -->
+            </div>
+            <div class="cotizacion-aviso">
+                <p><strong>⚠️ Aviso importante:</strong></p>
+                <p>Esta cotización es <strong>estimada</strong> y puede variar según las condiciones técnicas de tu ubicación. 
+                Un técnico evaluará tu domicilio para confirmar el costo final de instalación.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary btn-full" onclick="continuarSolicitud()">
+                    Continuar con la Solicitud
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/planes.js') }}"></script>
+{% endblock %}

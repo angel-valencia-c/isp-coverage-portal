@@ -5,6 +5,7 @@ Rutas para el portal público de búsqueda de cobertura.
 """
 from flask import Blueprint, render_template, request, jsonify
 from app.services.busqueda_publica_service import BusquedaPublicaService
+from app.services.planes_publicos_service import PlanesPublicosService
 
 portal_bp = Blueprint('portal', __name__, url_prefix='/')
 
@@ -16,6 +17,73 @@ def index():
     """
     municipios = BusquedaPublicaService.get_municipios_activos()
     return render_template('pages/public/index.html', municipios=municipios)
+
+
+@portal_bp.route('/planes/<int:colonia_id>')
+def planes(colonia_id):
+    """
+    Página de planes disponibles para una colonia con cobertura.
+    """
+    # Verificar cobertura
+    resultado = BusquedaPublicaService.verificar_cobertura(colonia_id)
+    
+    if not resultado['tiene_cobertura']:
+        return render_template(
+            'pages/public/sin_cobertura.html',
+            colonia=resultado['colonia']
+        )
+    
+    # Obtener planes disponibles
+    cobertura = resultado['cobertura']
+    planes_info = PlanesPublicosService.get_planes_disponibles(cobertura.id)
+    plan_destacado = PlanesPublicosService.get_plan_destacado(planes_info)
+    
+    return render_template(
+        'pages/public/planes.html',
+        colonia=resultado['colonia'],
+        cobertura=cobertura,
+        planes_info=planes_info,
+        plan_destacado=plan_destacado
+    )
+
+
+@portal_bp.route('/api/planes/<int:cobertura_id>')
+def api_planes(cobertura_id):
+    """
+    API para obtener planes disponibles en una cobertura.
+    """
+    planes_info = PlanesPublicosService.get_planes_disponibles(cobertura_id)
+    
+    return jsonify([{
+        'id': p['plan'].id,
+        'nombre': p['plan'].nombre,
+        'velocidad_descarga': p['plan'].velocidad_descarga,
+        'velocidad_subida': p['plan'].velocidad_subida,
+        'precio_mensual': float(p['precio_mensual']),
+        'costo_instalacion': float(p['costo_instalacion']),
+        'destacado': p['plan'].destacado,
+        'descripcion': p['plan'].descripcion
+    } for p in planes_info])
+
+
+@portal_bp.route('/api/cotizacion/<int:cobertura_id>/<int:plan_id>')
+def api_cotizacion(cobertura_id, plan_id):
+    """
+    API para calcular cotización de un plan en una cobertura.
+    """
+    cotizacion = PlanesPublicosService.calcular_cotizacion(plan_id, cobertura_id)
+    
+    if not cotizacion:
+        return jsonify({'error': 'Plan no disponible'}), 404
+    
+    return jsonify({
+        'plan_id': cotizacion['plan'].id,
+        'plan_nombre': cotizacion['plan'].nombre,
+        'costo_instalacion': float(cotizacion['costo_instalacion']),
+        'precio_mensual': float(cotizacion['precio_mensual']),
+        'total_inicial': float(cotizacion['total_inicial']),
+        'mensaje': cotizacion['mensaje']
+    })
 
 
 @portal_bp.route('/api/municipios')

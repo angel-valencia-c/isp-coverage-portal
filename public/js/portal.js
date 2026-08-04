@@ -181,9 +181,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="result-detail-value">${data.colonia.municipio}</span>
                     </div>
                 </div>
-                <p style="margin-top: var(--space-4); color: var(--color-text-secondary);">
-                    Próximamente podrás ver los planes disponibles y solicitar tu instalación.
-                </p>
+                <div style="margin-top: var(--space-6);">
+                    <a href="/planes/${data.colonia.id}" class="btn btn-primary btn-full">
+                        Ver Planes Disponibles
+                    </a>
+                </div>
             `;
         } else {
             resultContainer.className = 'result-container result-error';
@@ -201,10 +203,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="result-detail-value">${data.colonia.municipio}</span>
                     </div>
                 </div>
-                <p style="margin-top: var(--space-4); color: var(--color-text-secondary);">
-                    Estamos trabajando para llevar internet de alta velocidad a tu zona.
-                    <br>Próximamente podrás dejar tus datos para ser notificado cuando haya cobertura.
-                </p>
+                <div style="margin-top: var(--space-6);">
+                    <a href="/planes/${data.colonia.id}" class="btn btn-secondary btn-full">
+                        Más Información
+                    </a>
+                </div>
             `;
         }
         
