@@ -19,12 +19,13 @@ Este documento registra warnings de deprecación, observaciones técnicas y deud
 
 **Severidad:** BAJA  
 **Tipo:** Deprecation Warning  
-**Detectado en:** Módulo 2, 3, 4, 5  
+**Detectado en:** Módulo 2, 3, 4, 5, 6  
 **Archivos afectados:**
 - `app/services/municipio_service.py` (líneas 105, 136, 162)
 - `app/services/colonia_service.py` (líneas 89, 134, 176)
 - `app/services/cobertura_service.py` (líneas 39, 96)
 - `app/services/plan_service.py` (líneas 92, 118, 165, 191)
+- `app/services/disponibilidad_plan_service.py` (líneas 41, 46, 124, 150)
 - `tests/test_municipios.py` (líneas 223, 238)
 - `tests/test_colonias.py` (líneas 317, 332)
 - `tests/test_cobertura.py` (línea 220)
@@ -180,11 +181,11 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 - [x] Navegación coherente
 - [ ] DEUDA-001 revisada (Query.get en plan_service.py)
 
-### Módulo 6: Asociación Planes-Zonas ⏳
-- [ ] Tests pasando
-- [ ] Coverage > 80%
-- [ ] Navegación coherente
-- [ ] Sin deuda técnica nueva
+### Módulo 6: Asociación Planes-Zonas ✅
+- [x] Tests pasando
+- [x] Coverage > 80%
+- [x] Navegación coherente
+- [ ] DEUDA-001 revisada (Query.get en disponibilidad_plan_service.py)
 
 ### Módulo 7: Dashboard y Vista Jerárquica ⏳
 - [ ] Tests pasando
@@ -254,6 +255,7 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 | 2026-08-03 | 3 | Detectado DEUDA-001 | Sistema |
 | 2026-08-03 | 4 | Detectado DEUDA-001, DEUDA-002, OBS-001, OBS-002, OBS-003 | Sistema |
 | 2026-08-03 | 5 | Actualizado DEUDA-001 (agregado plan_service.py) | Sistema |
+| 2026-08-03 | 6 | Actualizado DEUDA-001 (agregado disponibilidad_plan_service.py) | Sistema |
 
 ---
 

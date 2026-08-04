@@ -50,9 +50,9 @@
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <span class="sidebar-nav-link" style="opacity: 0.5; cursor: not-allowed;" title="Módulo pendiente de implementación">
-                            Configuración (próximamente)
-                        </span>
+                        <a href="{{ url_for('disponibilidad.config_costo_base') }}" class="sidebar-nav-link {% if request.endpoint and 'disponibilidad' in request.endpoint %}active{% endif %}">
+                            Configuración
+                        </a>
                     </li>
                 </ul>
             </nav>

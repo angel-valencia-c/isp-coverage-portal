@@ -14,6 +14,7 @@ from .plan import Plan
 from .disponibilidad_plan import DisponibilidadPlanZona
 from .solicitud import SolicitudInstalacion
 from .nota_solicitud import NotaSolicitud
+from .configuracion import Configuracion
 
 __all__ = [
     'BaseModel',
@@ -25,4 +26,5 @@ __all__ = [
     'DisponibilidadPlanZona',
     'SolicitudInstalacion',
     'NotaSolicitud',
+    'Configuracion',
 ]

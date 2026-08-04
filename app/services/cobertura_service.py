@@ -253,11 +253,18 @@ class CoberturaService:
                 estado='pendiente'
             ).count()
             
+            # Contar planes asociados
+            from app.models.disponibilidad_plan import DisponibilidadPlanZona
+            planes_count = DisponibilidadPlanZona.query.filter_by(
+                cobertura_id=cobertura.id
+            ).count()
+            
             resultado.append({
                 'cobertura': cobertura,
                 'colonia': colonia,
                 'municipio': municipio,
-                'solicitudes_pendientes': solicitudes_pendientes
+                'solicitudes_pendientes': solicitudes_pendientes,
+                'planes_count': planes_count
             })
         
         return resultado

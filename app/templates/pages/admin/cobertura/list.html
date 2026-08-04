@@ -47,6 +47,7 @@
                 <th>Colonia</th>
                 <th>Tipo</th>
                 <th>Estado</th>
+                <th>Planes</th>
                 <th>Solicitudes Pendientes</th>
                 <th>Notas</th>
                 <th>Acciones</th>
@@ -64,6 +65,11 @@
                     {% else %}
                         <span class="badge badge-error">Inactiva</span>
                     {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('disponibilidad.list_by_cobertura', cobertura_id=info.cobertura.id) }}" class="badge badge-info">
+                        {{ info.planes_count }} plan(es)
+                    </a>
                 </td>
                 <td>
                     {% if info.solicitudes_pendientes > 0 %}

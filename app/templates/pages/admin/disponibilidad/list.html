@@ -1,0 +1,106 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Planes en {{ cobertura.colonia.nombre }}{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Planes Disponibles</h1>
+    <p class="main-subtitle">{{ cobertura.colonia.nombre }}, {{ cobertura.colonia.municipio.nombre }}</p>
+</div>
+
+<div class="card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="card-title">Planes Asociados</h3>
+        <a href="{{ url_for('cobertura.list') }}" class="btn btn-secondary">
+            Volver a Cobertura
+        </a>
+    </div>
+    
+    {% if disponibilidades %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Plan</th>
+                <th>Velocidad</th>
+                <th>Precio Mensual</th>
+                <th>Costo Instalación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in disponibilidades %}
+            <tr>
+                <td>{{ item.plan.nombre }}</td>
+                <td>{{ item.plan.velocidad_descarga }} Mbps ↓ / {{ item.plan.velocidad_subida }} Mbps ↑</td>
+                <td>${{ "%.2f"|format(item.plan.precio_mensual) }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('disponibilidad.update_costo', disponibilidad_id=item.disponibilidad.id) }}" style="display: inline;">
+                        <input type="hidden" name="cobertura_id" value="{{ cobertura.id }}">
+                        <input type="number" name="costo_instalacion" value="{{ item.disponibilidad.costo_instalacion or 0 }}" step="0.01" min="0" style="width: 100px; padding: 4px;">
+                        <button type="submit" class="btn btn-secondary" style="padding: 4px 8px; font-size: var(--text-sm);">
+                            Actualizar
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('disponibilidad.remove_plan', disponibilidad_id=item.disponibilidad.id) }}" style="display: inline;">
+                        <input type="hidden" name="cobertura_id" value="{{ cobertura.id }}">
+                        <button type="submit" class="btn btn-secondary" style="padding: 4px 8px; font-size: var(--text-sm);" onclick="return confirm('¿Estás seguro de desasociar este plan?')">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
+        No hay planes asociados a esta cobertura.
+    </p>
+    {% endif %}
+</div>
+
+{% if planes_disponibles %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Asociar Nuevo Plan</h3>
+    </div>
+    <form method="POST" action="{{ url_for('disponibilidad.add_plan', cobertura_id=cobertura.id) }}">
+        <div class="form-field">
+            <label for="plan_id" class="form-label">Plan *</label>
+            <select id="plan_id" name="plan_id" class="form-input" required>
+                <option value="">Selecciona un plan</option>
+                {% for plan in planes_disponibles %}
+                <option value="{{ plan.id }}">{{ plan.nombre }} - {{ plan.velocidad_descarga }} Mbps - ${{ "%.2f"|format(plan.precio_mensual) }}/mes</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-field">
+            <label for="costo_instalacion" class="form-label">Costo de Instalación (opcional)</label>
+            <input 
+                type="number" 
+                id="costo_instalacion" 
+                name="costo_instalacion" 
+                class="form-input" 
+                step="0.01" 
+                min="0"
+                placeholder="Dejar vacío para usar costo estándar base"
+            >
+            <p class="form-help">Si se deja vacío, se usará el costo estándar base configurado.</p>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            Asociar Plan
+        </button>
+    </form>
+</div>
+{% else %}
+<div class="card">
+    <p style="text-align: center; padding: var(--space-4); color: var(--color-text-muted);">
+        Todos los planes activos ya están asociados a esta cobertura.
+    </p>
+</div>
+{% endif %}
+{% endblock %}
