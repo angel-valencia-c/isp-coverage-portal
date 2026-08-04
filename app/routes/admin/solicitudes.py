@@ -6,6 +6,7 @@ Rutas para el panel administrativo de gestión de solicitudes.
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for, Response
 from flask_login import login_required, current_user
 from app.services.gestion_solicitudes_service import GestionSolicitudesService
+from app.services.notas_solicitudes_service import NotasSolicitudesService
 from app.services.auth_service import AuthService
 
 solicitudes_bp = Blueprint('solicitudes', __name__, url_prefix='/admin/solicitudes')
@@ -69,9 +70,13 @@ def detalle_solicitud(solicitud_id):
         flash('Solicitud no encontrada', 'error')
         return redirect(url_for('solicitudes.listar_solicitudes'))
     
+    # Obtener notas de la solicitud
+    notas = NotasSolicitudesService.get_notas_by_solicitud(solicitud_id, orden='desc')
+    
     return render_template(
         'pages/admin/solicitudes/detalle.html',
-        solicitud=solicitud
+        solicitud=solicitud,
+        notas=notas
     )
 
 
@@ -156,3 +161,41 @@ def exportar_csv():
     )
     
     return output
+
+
+@solicitudes_bp.route('/<int:solicitud_id>/notas', methods=['POST'])
+@login_required
+@AuthService.require_admin
+def agregar_nota(solicitud_id):
+    """
+    Agrega una nota a una solicitud.
+    """
+    texto = request.form.get('nota_texto', '').strip()
+    
+    try:
+        NotasSolicitudesService.crear_nota(
+            solicitud_id=solicitud_id,
+            texto=texto,
+            usuario_id=current_user.id
+        )
+        flash('Nota agregada correctamente', 'success')
+    except ValueError as e:
+        flash(str(e), 'error')
+    
+    return redirect(url_for('solicitudes.detalle_solicitud', solicitud_id=solicitud_id))
+
+
+@solicitudes_bp.route('/<int:solicitud_id>/notas/<int:nota_id>/eliminar', methods=['POST'])
+@login_required
+@AuthService.require_admin
+def eliminar_nota(solicitud_id, nota_id):
+    """
+    Elimina una nota de una solicitud.
+    """
+    try:
+        NotasSolicitudesService.eliminar_nota(nota_id)
+        flash('Nota eliminada correctamente', 'success')
+    except ValueError as e:
+        flash(str(e), 'error')
+    
+    return redirect(url_for('solicitudes.detalle_solicitud', solicitud_id=solicitud_id))

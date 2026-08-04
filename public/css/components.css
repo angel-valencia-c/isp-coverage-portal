@@ -404,6 +404,58 @@
     max-width: 300px;
 }
 
+/* ========================================
+   NOTAS DE SEGUIMIENTO
+   ======================================== */
+
+.nota-form {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-6);
+    border-bottom: var(--border);
+}
+
+.notas-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.nota-item {
+    background-color: var(--color-surface-alt);
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
+}
+
+.nota-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: var(--border);
+}
+
+.nota-autor {
+    font-weight: var(--font-semibold);
+    color: var(--color-text);
+}
+
+.nota-fecha {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.nota-delete-form {
+    margin-left: auto;
+}
+
+.nota-texto {
+    color: var(--color-text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .stats-grid {
@@ -425,5 +477,16 @@
     
     .inline-form .form-input {
         max-width: 100%;
+    }
+    
+    .nota-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
+    
+    .nota-delete-form {
+        margin-left: 0;
+        width: 100%;
     }
 }

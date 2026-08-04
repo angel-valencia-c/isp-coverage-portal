@@ -168,4 +168,51 @@
         </a>
     </div>
 </div>
+
+<!-- Notas de Seguimiento -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Notas de Seguimiento</h3>
+    </div>
+    
+    <!-- Formulario para agregar nota -->
+    <form method="POST" action="{{ url_for('solicitudes.agregar_nota', solicitud_id=solicitud.id) }}" class="nota-form">
+        <div class="form-group">
+            <label for="nota_texto" class="form-label">Agregar Nueva Nota</label>
+            <textarea 
+                id="nota_texto" 
+                name="nota_texto" 
+                class="form-input" 
+                rows="3" 
+                placeholder="Escribe una nota de seguimiento..."
+                required
+            ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Nota</button>
+    </form>
+    
+    <!-- Lista de notas -->
+    {% if notas %}
+    <div class="notas-list">
+        {% for nota in notas %}
+        <div class="nota-item">
+            <div class="nota-header">
+                <span class="nota-autor">{{ nota.usuario.nombre }}</span>
+                <span class="nota-fecha">{{ nota.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</span>
+                <form method="POST" action="{{ url_for('solicitudes.eliminar_nota', solicitud_id=solicitud.id, nota_id=nota.id) }}" class="nota-delete-form">
+                    <button type="submit" class="btn btn-secondary btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta nota?')">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+            <div class="nota-texto">{{ nota.texto }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No hay notas de seguimiento para esta solicitud.</p>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

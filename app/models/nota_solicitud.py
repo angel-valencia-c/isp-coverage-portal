@@ -34,6 +34,9 @@ class NotaSolicitud(BaseModel):
         comment='Contenido de la nota'
     )
     
+    # Relación con el usuario que creó la nota
+    usuario = db.relationship('UsuarioAdministrativo', foreign_keys='NotaSolicitud.creado_por')
+    
     def __repr__(self):
         return f'<NotaSolicitud {self.id} - Solicitud {self.solicitud_id}>'
     

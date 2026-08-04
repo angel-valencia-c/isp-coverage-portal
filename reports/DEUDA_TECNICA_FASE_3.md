@@ -348,6 +348,33 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 
 ---
 
+## FASE 8: Panel Administrativo - Notas y Seguimiento
+
+### Estado: ✅ COMPLETADA
+
+### Módulo 1: Servicio de Notas de Solicitudes ✅
+- [x] Tests pasando (9/9)
+- [x] Coverage 100%
+- [x] Sin deuda técnica nueva
+- [x] DEUDA-001 actualizada (agregado notas_solicitudes_service.py)
+- [x] DEUDA-003 detectada (relaciones con foreign_keys como string)
+
+### Resumen Fase 8
+- **Total tests:** 9 nuevos tests
+- **Tests totales:** 211 pasando (100%)
+- **Coverage general:** 78%
+- **Deuda técnica:** DEUDA-001 actualizada con notas_solicitudes_service.py, DEUDA-003 detectada
+- **Archivos creados:**
+  - `app/services/notas_solicitudes_service.py`
+  - `tests/test_notas_solicitudes.py`
+- **Archivos modificados:**
+  - `app/routes/admin/solicitudes.py` (agregadas rutas para agregar y eliminar notas)
+  - `app/templates/pages/admin/solicitudes/detalle.html` (agregada sección de notas)
+  - `app/models/nota_solicitud.py` (agregada relación con usuario)
+  - `public/css/components.css` (agregados estilos para notas de seguimiento)
+
+---
+
 ## Plan de Resolución
 
 ### Antes de cerrar Fase 3:
@@ -380,6 +407,42 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 
 ---
 
+### ⚠️ DEUDA-003: Relaciones SQLAlchemy con foreign_keys como string
+
+**Severidad:** BAJA  
+**Tipo:** Code Style  
+**Detectado en:** Fase 8  
+**Archivos afectados:**
+- `app/models/nota_solicitud.py` (línea 38)
+
+**Descripción:**
+La relación `usuario` en `NotaSolicitud` usa `foreign_keys='NotaSolicitud.creado_por'` como string en lugar de una lista con la columna. Esto funciona pero no es la forma más explícita.
+
+**Código actual:**
+```python
+usuario = db.relationship('UsuarioAdministrativo', foreign_keys='NotaSolicitud.creado_por')
+```
+
+**Código recomendado:**
+```python
+usuario = db.relationship('UsuarioAdministrativo', foreign_keys=[creado_por])
+```
+
+**Impacto:**
+- Funcionalidad: ✅ Correcta
+- Performance: ✅ Sin impacto
+- Mantenibilidad: ⚠️ Menos explícito
+
+**Acción requerida:**
+- [ ] Investigar por qué `foreign_keys=[creado_por]` causa error de NameError
+- [ ] Documentar la solución correcta para relaciones con columnas heredadas
+- [ ] Aplicar el patrón correcto en todos los modelos
+
+**Prioridad:** BAJA  
+**Estimación:** 15 minutos
+
+---
+
 ## Historial de Cambios
 
 | Fecha | Módulo | Descripción | Autor |
@@ -398,6 +461,7 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 | 2026-08-03 | Fase 5 | Planes y Cotización completado, DEUDA-001 actualizada con planes_publicos_service.py | Sistema |
 | 2026-08-03 | Fase 6 | Formulario de Solicitud completado, DEUDA-001 y DEUDA-002 actualizadas con solicitudes_publicas_service.py | Sistema |
 | 2026-08-03 | Fase 7 | Gestión de Solicitudes completado, DEUDA-001 actualizada con gestion_solicitudes_service.py | Sistema |
+| 2026-08-03 | Fase 8 | Notas y Seguimiento completado, DEUDA-001 actualizada con notas_solicitudes_service.py, DEUDA-003 detectada | Sistema |
 
 ---
 
