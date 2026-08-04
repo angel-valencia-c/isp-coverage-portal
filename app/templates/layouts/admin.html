@@ -45,9 +45,9 @@
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <span class="sidebar-nav-link" style="opacity: 0.5; cursor: not-allowed;" title="Módulo pendiente de implementación">
-                            Planes (próximamente)
-                        </span>
+                        <a href="{{ url_for('planes.list') }}" class="sidebar-nav-link {% if request.endpoint and 'planes' in request.endpoint %}active{% endif %}">
+                            Planes
+                        </a>
                     </li>
                     <li class="sidebar-nav-item">
                         <span class="sidebar-nav-link" style="opacity: 0.5; cursor: not-allowed;" title="Módulo pendiente de implementación">

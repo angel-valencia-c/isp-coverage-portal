@@ -1,0 +1,86 @@
+{% extends "layouts/admin.html" %}
+
+{% block title %}Planes{% endblock %}
+
+{% block content %}
+<div class="main-header">
+    <h1 class="main-title">Planes de Internet</h1>
+    <p class="main-subtitle">Administración del catálogo de planes</p>
+</div>
+
+<div class="card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="card-title">Lista de Planes</h3>
+        <div>
+            <a href="{{ url_for('planes.list', incluir_inactivos='true' if not incluir_inactivos else 'false') }}" class="btn btn-secondary">
+                {% if incluir_inactivos %}Ocultar Inactivos{% else %}Mostrar Inactivos{% endif %}
+            </a>
+            <a href="{{ url_for('planes.new') }}" class="btn btn-primary">
+                Nuevo Plan
+            </a>
+        </div>
+    </div>
+    
+    {% if planes %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Orden</th>
+                <th>Nombre</th>
+                <th>Velocidad</th>
+                <th>Precio Mensual</th>
+                <th>Destacado</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plan in planes %}
+            <tr>
+                <td>{{ plan.orden }}</td>
+                <td>{{ plan.nombre }}</td>
+                <td>{{ plan.velocidad_descarga }} Mbps ↓ / {{ plan.velocidad_subida }} Mbps ↑</td>
+                <td>${{ "%.2f"|format(plan.precio_mensual) }}</td>
+                <td>
+                    {% if plan.destacado %}
+                        <span class="badge badge-success">Sí</span>
+                    {% else %}
+                        <span class="text-muted">No</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if plan.activo %}
+                        <span class="badge badge-success">Activo</span>
+                    {% else %}
+                        <span class="badge badge-error">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('planes.edit', plan_id=plan.id) }}" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                        Editar
+                    </a>
+                    {% if plan.activo %}
+                        <form method="POST" action="{{ url_for('planes.deactivate', plan_id=plan.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);" onclick="return confirm('¿Estás seguro de desactivar este plan?')">
+                                Desactivar
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('planes.activate', plan_id=plan.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-secondary" style="padding: var(--space-1) var(--space-3); font-size: var(--text-sm);">
+                                Activar
+                            </button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
+        No hay planes registrados.
+    </p>
+    {% endif %}
+</div>
+{% endblock %}
