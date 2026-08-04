@@ -14,12 +14,12 @@
     </div>
     <p>
         El sistema de gestión de cobertura está operativo. 
-        Los módulos de administración estarán disponibles próximamente.
+        Los módulos de administración de cobertura y planes estarán disponibles próximamente.
     </p>
     <div class="mt-6">
-        <p><strong>Usuario actual:</strong> {{ usuario.nombre }}</p>
-        <p><strong>Email:</strong> {{ usuario.email }}</p>
-        <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+        <p><strong>Usuario actual:</strong> {{ current_user.nombre }}</p>
+        <p><strong>Email:</strong> {{ current_user.email }}</p>
+        <p><strong>Rol:</strong> {{ current_user.rol }}</p>
     </div>
 </div>
 {% endblock %}

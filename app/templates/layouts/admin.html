@@ -20,39 +20,39 @@
             <nav>
                 <ul class="sidebar-nav">
                     <li class="sidebar-nav-item">
-                        <a href="{{ url_for('admin.dashboard') }}" class="sidebar-nav-link active">
+                        <a href="{{ url_for('admin.dashboard') }}" class="sidebar-nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
                             Dashboard
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link">
-                            Territorio
-                        </a>
+                        <span class="sidebar-nav-link" style="opacity: 0.5; cursor: not-allowed;" title="Módulo pendiente de implementación">
+                            Territorio (próximamente)
+                        </span>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link">
+                        <a href="{{ url_for('municipios.list') }}" class="sidebar-nav-link {% if request.endpoint and 'municipios' in request.endpoint %}active{% endif %}">
                             Municipios
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link">
+                        <a href="{{ url_for('colonias.list') }}" class="sidebar-nav-link {% if request.endpoint and 'colonias' in request.endpoint %}active{% endif %}">
                             Colonias
                         </a>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link">
-                            Cobertura
-                        </a>
+                        <span class="sidebar-nav-link" style="opacity: 0.5; cursor: not-allowed;" title="Módulo pendiente de implementación">
+                            Cobertura (próximamente)
+                        </span>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link">
-                            Planes
-                        </a>
+                        <span class="sidebar-nav-link" style="opacity: 0.5; cursor: not-allowed;" title="Módulo pendiente de implementación">
+                            Planes (próximamente)
+                        </span>
                     </li>
                     <li class="sidebar-nav-item">
-                        <a href="#" class="sidebar-nav-link">
-                            Configuración
-                        </a>
+                        <span class="sidebar-nav-link" style="opacity: 0.5; cursor: not-allowed;" title="Módulo pendiente de implementación">
+                            Configuración (próximamente)
+                        </span>
                     </li>
                 </ul>
             </nav>
