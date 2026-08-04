@@ -1,0 +1,111 @@
+{% extends "layouts/public.html" %}
+
+{% block title %}Registro de Interés - Enlaces Costa Grande{% endblock %}
+
+{% block content %}
+<section class="form-hero">
+    <div class="container">
+        <div class="form-hero-content">
+            <h1 class="form-hero-title">Registro de Interés</h1>
+            <p class="form-hero-subtitle">Déjanos tus datos para notificarte cuando haya cobertura en tu zona</p>
+        </div>
+    </div>
+</section>
+
+<section class="form-section">
+    <div class="container">
+        <div class="form-container">
+            <!-- Información de ubicación -->
+            <div class="plan-summary">
+                <h3 class="summary-title">Ubicación de Interés</h3>
+                <div class="summary-details">
+                    <div class="summary-item">
+                        <span class="summary-label">Colonia:</span>
+                        <span class="summary-value">{{ colonia.nombre }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Municipio:</span>
+                        <span class="summary-value">{{ colonia.municipio.nombre }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Estado de cobertura:</span>
+                        <span class="summary-value">
+                            {% if tiene_cobertura %}
+                                <span class="badge badge-success">Con cobertura</span>
+                            {% else %}
+                                <span class="badge badge-warning">Sin cobertura actual</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario -->
+            <form id="leadForm" class="solicitud-form">
+                <input type="hidden" id="colonia_id" name="colonia_id" value="{{ colonia.id }}">
+                <input type="hidden" id="municipio_id" name="municipio_id" value="{{ colonia.municipio_id }}">
+
+                <div class="form-group">
+                    <label for="nombre_prospecto" class="form-label">Nombre Completo *</label>
+                    <input 
+                        type="text" 
+                        id="nombre_prospecto" 
+                        name="nombre_prospecto" 
+                        class="form-input" 
+                        required
+                        placeholder="Ej: Juan Pérez García"
+                    >
+                    <span class="form-error" id="error-nombre"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono_contacto" class="form-label">Teléfono de Contacto *</label>
+                    <input 
+                        type="tel" 
+                        id="telefono_contacto" 
+                        name="telefono_contacto" 
+                        class="form-input" 
+                        required
+                        placeholder="10 dígitos"
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                    >
+                    <span class="form-error" id="error-telefono"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion_especifica" class="form-label">Dirección (opcional)</label>
+                    <textarea 
+                        id="direccion_especifica" 
+                        name="direccion_especifica" 
+                        class="form-input" 
+                        rows="3"
+                        placeholder="Calle, número, colonia, referencias..."
+                    ></textarea>
+                    <span class="form-error" id="error-direccion"></span>
+                </div>
+
+                <!-- Aviso legal -->
+                <div class="aviso-legal">
+                    <p><strong>ℹ️ Información:</strong></p>
+                    <p>Al registrar tu interés, nos ayudas a priorizar la expansión de nuestra red a tu zona. 
+                    Te contactaremos cuando haya cobertura disponible en tu ubicación.</p>
+                    <p>Tus datos serán tratados conforme a nuestro aviso de privacidad.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                    Registrar Interés
+                </button>
+            </form>
+
+            <div id="resultado" class="resultado-container" style="display: none;">
+                <!-- El resultado se insertará aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/solicitud_lead.js') }}"></script>
+{% endblock %}

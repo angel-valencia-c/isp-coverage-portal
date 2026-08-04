@@ -1,0 +1,117 @@
+{% extends "layouts/public.html" %}
+
+{% block title %}Solicitud de Instalación - Enlaces Costa Grande{% endblock %}
+
+{% block content %}
+<section class="form-hero">
+    <div class="container">
+        <div class="form-hero-content">
+            <h1 class="form-hero-title">Solicitud de Instalación</h1>
+            <p class="form-hero-subtitle">Completa tus datos para solicitar el servicio</p>
+        </div>
+    </div>
+</section>
+
+<section class="form-section">
+    <div class="container">
+        <div class="form-container">
+            <!-- Resumen del plan -->
+            <div class="plan-summary">
+                <h3 class="summary-title">Resumen del Plan</h3>
+                <div class="summary-details">
+                    <div class="summary-item">
+                        <span class="summary-label">Plan:</span>
+                        <span class="summary-value">{{ cotizacion.plan.nombre }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Velocidad:</span>
+                        <span class="summary-value">{{ cotizacion.plan.velocidad_descarga }} Mbps ↓ / {{ cotizacion.plan.velocidad_subida }} Mbps ↑</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Ubicación:</span>
+                        <span class="summary-value">{{ colonia.nombre }}, {{ colonia.municipio.nombre }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Costo de instalación:</span>
+                        <span class="summary-value">${{ "%.2f"|format(cotizacion.costo_instalacion) }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Mensualidad:</span>
+                        <span class="summary-value">${{ "%.2f"|format(cotizacion.precio_mensual) }}/mes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario -->
+            <form id="solicitudForm" class="solicitud-form">
+                <input type="hidden" id="colonia_id" name="colonia_id" value="{{ colonia.id }}">
+                <input type="hidden" id="municipio_id" name="municipio_id" value="{{ colonia.municipio_id }}">
+                <input type="hidden" id="plan_id" name="plan_id" value="{{ cotizacion.plan.id }}">
+                <input type="hidden" id="costo_instalacion" name="costo_instalacion_cotizado" value="{{ cotizacion.costo_instalacion }}">
+                <input type="hidden" id="precio_mensual" name="precio_mensual_cotizado" value="{{ cotizacion.precio_mensual }}">
+
+                <div class="form-group">
+                    <label for="nombre_prospecto" class="form-label">Nombre Completo *</label>
+                    <input 
+                        type="text" 
+                        id="nombre_prospecto" 
+                        name="nombre_prospecto" 
+                        class="form-input" 
+                        required
+                        placeholder="Ej: Juan Pérez García"
+                    >
+                    <span class="form-error" id="error-nombre"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono_contacto" class="form-label">Teléfono de Contacto *</label>
+                    <input 
+                        type="tel" 
+                        id="telefono_contacto" 
+                        name="telefono_contacto" 
+                        class="form-input" 
+                        required
+                        placeholder="10 dígitos"
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                    >
+                    <span class="form-error" id="error-telefono"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion_especifica" class="form-label">Dirección Específica *</label>
+                    <textarea 
+                        id="direccion_especifica" 
+                        name="direccion_especifica" 
+                        class="form-input" 
+                        rows="3"
+                        required
+                        placeholder="Calle, número, colonia, referencias..."
+                    ></textarea>
+                    <span class="form-error" id="error-direccion"></span>
+                </div>
+
+                <!-- Aviso legal -->
+                <div class="aviso-legal">
+                    <p><strong>⚠️ Aviso importante:</strong></p>
+                    <p>La contratación formal del servicio requiere la firma de un contrato con Enlaces Costa Grande. 
+                    Esta solicitud es el primer paso para que nuestro equipo te contacte y programe una visita técnica.</p>
+                    <p>Los costos mostrados son estimados y pueden variar según las condiciones técnicas de tu ubicación.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                    Enviar Solicitud
+                </button>
+            </form>
+
+            <div id="resultado" class="resultado-container" style="display: none;">
+                <!-- El resultado se insertará aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/solicitud.js') }}"></script>
+{% endblock %}

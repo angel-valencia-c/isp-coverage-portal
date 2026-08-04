@@ -19,7 +19,7 @@ Este documento registra warnings de deprecación, observaciones técnicas y deud
 
 **Severidad:** BAJA  
 **Tipo:** Deprecation Warning  
-**Detectado en:** Módulo 2, 3, 4, 5, 6, Fase 4, Fase 5  
+**Detectado en:** Módulo 2, 3, 4, 5, 6, Fase 4, Fase 5, Fase 6  
 **Archivos afectados:**
 - `app/services/municipio_service.py` (líneas 105, 136, 162)
 - `app/services/colonia_service.py` (líneas 89, 134, 176)
@@ -28,6 +28,7 @@ Este documento registra warnings de deprecación, observaciones técnicas y deud
 - `app/services/disponibilidad_plan_service.py` (líneas 41, 46, 124, 150)
 - `app/services/busqueda_publica_service.py` (línea 68)
 - `app/services/planes_publicos_service.py` (línea 89)
+- `app/services/solicitudes_publicas_service.py` (líneas 67, 77)
 - `tests/test_municipios.py` (líneas 223, 238)
 - `tests/test_colonias.py` (líneas 317, 332)
 - `tests/test_cobertura.py` (línea 220)
@@ -65,11 +66,13 @@ municipio = db.session.get(Municipio, municipio_id)
 
 **Severidad:** BAJA  
 **Tipo:** Deprecation Warning  
-**Detectado en:** Módulo 1, 4  
+**Detectado en:** Módulo 1, 4, Fase 6  
 **Archivos afectados:**
 - `app/services/auth_service.py` (línea 50)
 - `app/services/cobertura_service.py` (líneas 39, 55, 126)
+- `app/services/solicitudes_publicas_service.py` (líneas 82, 157)
 - `tests/test_cobertura.py` (líneas 86, 154, 155, 353)
+- `tests/test_solicitudes_publicas.py` (línea 186)
 - `tests/models/test_usuario.py` (línea 213)
 
 **Descripción:**
@@ -285,6 +288,38 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 
 ---
 
+## FASE 6: Portal Público - Formulario de Solicitud
+
+### Estado: ✅ COMPLETADA
+
+### Módulo 1: Servicio de Solicitudes Públicas ✅
+- [x] Tests pasando (9/9)
+- [x] Coverage > 85%
+- [x] Sin deuda técnica nueva
+- [x] DEUDA-001 actualizada (agregado solicitudes_publicas_service.py)
+- [x] DEUDA-002 actualizada (agregado solicitudes_publicas_service.py)
+
+### Resumen Fase 6
+- **Total tests:** 9 nuevos tests
+- **Tests totales:** 192 pasando (100%)
+- **Coverage general:** 78%
+- **Deuda técnica:** DEUDA-001 y DEUDA-002 actualizadas con solicitudes_publicas_service.py
+- **Archivos creados:**
+  - `app/services/solicitudes_publicas_service.py`
+  - `app/templates/pages/public/solicitud.html`
+  - `app/templates/pages/public/solicitud_lead.html`
+  - `app/templates/pages/public/confirmacion.html`
+  - `public/js/solicitud.js`
+  - `public/js/solicitud_lead.js`
+  - `tests/test_solicitudes_publicas.py`
+- **Archivos modificados:**
+  - `app/routes/portal.py` (agregadas rutas de solicitud, lead y confirmación)
+  - `public/css/public.css` (agregados estilos para formularios y confirmación)
+  - `public/js/planes.js` (actualizado para redirigir a solicitud)
+  - `app/templates/pages/public/sin_cobertura.html` (actualizado para redirigir a lead)
+
+---
+
 ## Plan de Resolución
 
 ### Antes de cerrar Fase 3:
@@ -333,6 +368,7 @@ El campo `notas` en Cobertura es texto libre. En futuras versiones podría evolu
 | 2026-08-03 | 10 | Fase 3 completada, deuda técnica documentada, reporte final generado | Sistema |
 | 2026-08-03 | Fase 4 | Portal Público completado, DEUDA-001 actualizada con busqueda_publica_service.py | Sistema |
 | 2026-08-03 | Fase 5 | Planes y Cotización completado, DEUDA-001 actualizada con planes_publicos_service.py | Sistema |
+| 2026-08-03 | Fase 6 | Formulario de Solicitud completado, DEUDA-001 y DEUDA-002 actualizadas con solicitudes_publicas_service.py | Sistema |
 
 ---
 

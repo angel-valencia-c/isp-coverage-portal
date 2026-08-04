@@ -43,12 +43,9 @@
                         Registra tu interés y te notificaremos cuando haya cobertura 
                         disponible en tu zona.
                     </p>
-                    <p class="option-note">
-                        Próximamente podrás dejar tus datos aquí.
-                    </p>
-                    <button class="btn btn-secondary" disabled>
-                        Próximamente
-                    </button>
+                    <a href="{{ url_for('portal.solicitud_lead', colonia_id=colonia.id) }}" class="btn btn-primary">
+                        Registrar Interés
+                    </a>
                 </div>
 
                 <div class="option-card">

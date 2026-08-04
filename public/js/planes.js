@@ -93,15 +93,11 @@ function continuarSolicitud() {
         return;
     }
     
-    // Guardar información del plan en sessionStorage para el formulario
-    sessionStorage.setItem('planSeleccionado', JSON.stringify(planSeleccionado));
+    // Obtener colonia ID de la URL
+    const coloniaId = window.location.pathname.split('/').pop();
     
-    // Redirigir al formulario de solicitud (Fase 6)
-    // Por ahora, mostrar mensaje
-    alert('Próximamente: Formulario de solicitud de instalación');
-    
-    // Cerrar modal
-    cerrarModal();
+    // Redirigir al formulario de solicitud
+    window.location.href = `/solicitud/${coloniaId}/${planSeleccionado.id}`;
 }
 
 // Cerrar modal al hacer clic fuera

@@ -3,9 +3,10 @@ Blueprint del Portal Público
 
 Rutas para el portal público de búsqueda de cobertura.
 """
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for, session
 from app.services.busqueda_publica_service import BusquedaPublicaService
 from app.services.planes_publicos_service import PlanesPublicosService
+from app.services.solicitudes_publicas_service import SolicitudesPublicasService
 
 portal_bp = Blueprint('portal', __name__, url_prefix='/')
 
@@ -176,3 +177,138 @@ def api_buscar_municipios():
         'id': m.id,
         'nombre': m.nombre
     } for m in municipios])
+
+
+@portal_bp.route('/solicitud/<int:colonia_id>/<int:plan_id>')
+def solicitud(colonia_id, plan_id):
+    """
+    Página de formulario de solicitud de instalación.
+    """
+    # Verificar cobertura
+    resultado = BusquedaPublicaService.verificar_cobertura(colonia_id)
+    
+    if not resultado['tiene_cobertura']:
+        flash('La colonia seleccionada no tiene cobertura disponible', 'error')
+        return redirect(url_for('portal.index'))
+    
+    # Obtener información del plan
+    cobertura = resultado['cobertura']
+    cotizacion = PlanesPublicosService.calcular_cotizacion(plan_id, cobertura.id)
+    
+    if not cotizacion:
+        flash('El plan seleccionado no está disponible', 'error')
+        return redirect(url_for('portal.planes', colonia_id=colonia_id))
+    
+    return render_template(
+        'pages/public/solicitud.html',
+        colonia=resultado['colonia'],
+        cotizacion=cotizacion
+    )
+
+
+@portal_bp.route('/solicitud/lead/<int:colonia_id>')
+def solicitud_lead(colonia_id):
+    """
+    Página de formulario para lead sin cobertura.
+    """
+    resultado = BusquedaPublicaService.verificar_cobertura(colonia_id)
+    
+    return render_template(
+        'pages/public/solicitud_lead.html',
+        colonia=resultado['colonia'],
+        tiene_cobertura=resultado['tiene_cobertura']
+    )
+
+
+@portal_bp.route('/api/solicitud', methods=['POST'])
+def api_crear_solicitud():
+    """
+    API para crear una nueva solicitud de instalación.
+    """
+    data = request.get_json()
+    
+    try:
+        solicitud = SolicitudesPublicasService.crear_solicitud(
+            nombre_prospecto=data.get('nombre_prospecto'),
+            telefono_contacto=data.get('telefono_contacto'),
+            direccion_especifica=data.get('direccion_especifica'),
+            municipio_id=data.get('municipio_id'),
+            colonia_id=data.get('colonia_id'),
+            plan_id=data.get('plan_id'),
+            costo_instalacion_cotizado=data.get('costo_instalacion_cotizado'),
+            precio_mensual_cotizado=data.get('precio_mensual_cotizado')
+        )
+        
+        return jsonify({
+            'success': True,
+            'solicitud_id': solicitud.id,
+            'mensaje': 'Solicitud creada exitosamente'
+        })
+    
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+
+
+@portal_bp.route('/api/solicitud/lead', methods=['POST'])
+def api_crear_lead():
+    """
+    API para crear un lead sin cobertura.
+    """
+    data = request.get_json()
+    
+    try:
+        solicitud = SolicitudesPublicasService.crear_lead_sin_cobertura(
+            nombre_prospecto=data.get('nombre_prospecto'),
+            telefono_contacto=data.get('telefono_contacto'),
+            municipio_id=data.get('municipio_id'),
+            colonia_id=data.get('colonia_id'),
+            direccion_especifica=data.get('direccion_especifica')
+        )
+        
+        return jsonify({
+            'success': True,
+            'solicitud_id': solicitud.id,
+            'mensaje': 'Lead registrado exitosamente'
+        })
+    
+    except ValueError as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+
+
+@portal_bp.route('/api/verificar-duplicado', methods=['POST'])
+def api_verificar_duplicado():
+    """
+    API para verificar si existe una solicitud duplicada.
+    """
+    data = request.get_json()
+    telefono = data.get('telefono_contacto', '')
+    
+    es_duplicado = SolicitudesPublicasService.verificar_duplicado(telefono)
+    
+    return jsonify({
+        'es_duplicado': es_duplicado
+    })
+
+
+@portal_bp.route('/confirmacion/<int:solicitud_id>')
+def confirmacion(solicitud_id):
+    """
+    Página de confirmación de solicitud.
+    """
+    from app.models.solicitud import SolicitudInstalacion
+    solicitud = SolicitudInstalacion.query.get(solicitud_id)
+    
+    if not solicitud:
+        flash('Solicitud no encontrada', 'error')
+        return redirect(url_for('portal.index'))
+    
+    return render_template(
+        'pages/public/confirmacion.html',
+        solicitud=solicitud
+    )

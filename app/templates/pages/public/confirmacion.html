@@ -1,0 +1,96 @@
+{% extends "layouts/public.html" %}
+
+{% block title %}Confirmación de Solicitud - Enlaces Costa Grande{% endblock %}
+
+{% block content %}
+<section class="confirmacion-hero">
+    <div class="container">
+        <div class="confirmacion-content">
+            <div class="confirmacion-icon">✅</div>
+            <h1 class="confirmacion-title">¡Solicitud Registrada!</h1>
+            <p class="confirmacion-subtitle">Tu solicitud ha sido recibida exitosamente</p>
+        </div>
+    </div>
+</section>
+
+<section class="confirmacion-section">
+    <div class="container">
+        <div class="confirmacion-card">
+            <div class="confirmacion-details">
+                <h3 class="details-title">Detalles de tu Solicitud</h3>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Número de Solicitud:</span>
+                    <span class="detail-value">#{{ solicitud.id }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Nombre:</span>
+                    <span class="detail-value">{{ solicitud.nombre_prospecto }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Teléfono:</span>
+                    <span class="detail-value">{{ solicitud.telefono_contacto }}</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Ubicación:</span>
+                    <span class="detail-value">{{ solicitud.colonia.nombre }}, {{ solicitud.colonia.municipio.nombre }}</span>
+                </div>
+                
+                {% if solicitud.plan %}
+                <div class="detail-item">
+                    <span class="detail-label">Plan Solicitado:</span>
+                    <span class="detail-value">{{ solicitud.plan.nombre }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="detail-item">
+                    <span class="detail-label">Estado:</span>
+                    <span class="detail-value">
+                        <span class="badge badge-info">{{ solicitud.estado|capitalize }}</span>
+                    </span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Fecha de Solicitud:</span>
+                    <span class="detail-value">{{ solicitud.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</span>
+                </div>
+            </div>
+
+            <div class="confirmacion-next-steps">
+                <h3 class="next-steps-title">Próximos Pasos</h3>
+                <ol class="next-steps-list">
+                    <li>Nuestro equipo revisará tu solicitud en las próximas 24-48 horas.</li>
+                    <li>Te contactaremos al teléfono proporcionado para confirmar detalles.</li>
+                    <li>Programaremos una visita técnica para evaluar las condiciones de instalación.</li>
+                    <li>Te presentaremos un contrato formal con los detalles del servicio.</li>
+                    <li>Una vez firmado el contrato, programaremos la instalación.</li>
+                </ol>
+            </div>
+
+            <div class="confirmacion-contact">
+                <h3 class="contact-title">¿Tienes preguntas?</h3>
+                <p>Contáctanos:</p>
+                <div class="contact-options">
+                    <a href="tel:+527441234567" class="contact-option">
+                        <span class="contact-icon">📞</span>
+                        <span class="contact-text">744 123 4567</span>
+                    </a>
+                    <a href="mailto:info@enlacescostagrande.com" class="contact-option">
+                        <span class="contact-icon">📧</span>
+                        <span class="contact-text">info@enlacescostagrande.com</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="confirmacion-actions">
+                <a href="{{ url_for('portal.index') }}" class="btn btn-secondary">
+                    Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
