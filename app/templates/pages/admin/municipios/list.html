@@ -22,6 +22,7 @@
     </div>
     
     {% if municipios %}
+    <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
@@ -68,6 +69,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% else %}
     <p style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
         No hay municipios registrados.

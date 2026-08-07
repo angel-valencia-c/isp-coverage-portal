@@ -290,10 +290,11 @@
 
 .table-responsive {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-.table th,
-.table td {
+.table-responsive .table th,
+.table-responsive .table td {
     white-space: nowrap;
 }
 

@@ -40,6 +40,7 @@
     </div>
     
     {% if coberturas_info %}
+    <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
@@ -102,6 +103,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% else %}
     <p style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">
         {% if municipio_id %}
