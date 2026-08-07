@@ -8,7 +8,7 @@ Proporciona campos de auditoría comunes:
 - actualizado_por: FK al usuario que actualizó el registro (nullable)
 - fecha_modificacion: Timestamp de última modificación
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from app.extensions import db
 
 
@@ -41,7 +41,7 @@ class BaseModel(db.Model):
     )
     fecha_creacion = db.Column(
         db.DateTime, 
-        default=datetime.utcnow, 
+        default=lambda: datetime.now(timezone.utc), 
         nullable=False,
         comment='Timestamp de creación del registro'
     )
@@ -53,8 +53,8 @@ class BaseModel(db.Model):
     )
     fecha_modificacion = db.Column(
         db.DateTime, 
-        default=datetime.utcnow, 
-        onupdate=datetime.utcnow, 
+        default=lambda: datetime.now(timezone.utc), 
+        onupdate=lambda: datetime.now(timezone.utc), 
         nullable=False,
         comment='Timestamp de última modificación del registro'
     )
