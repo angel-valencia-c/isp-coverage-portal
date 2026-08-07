@@ -11,7 +11,7 @@ Datos incluidos:
 - 2 coberturas de ejemplo
 - 2 solicitudes de ejemplo
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from app.extensions import db
 from app.models import (
     UsuarioAdministrativo,
@@ -134,7 +134,7 @@ def run_seeds():
                 colonia_id=colonias[data['colonia_idx']].id,
                 activa=data['activa'],
                 tipo_cobertura=data['tipo_cobertura'],
-                fecha_activacion=datetime.utcnow(),
+                fecha_activacion=datetime.now(timezone.utc),
                 notas=data['notas'],
                 creado_por=admin.id
             )
