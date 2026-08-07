@@ -795,6 +795,36 @@
     .no-coverage-options {
         grid-template-columns: 1fr;
     }
+
+    .form-container {
+        padding: var(--space-4);
+    }
+
+    .plan-summary {
+        padding: var(--space-4);
+        margin-bottom: var(--space-6);
+    }
+
+    .solicitud-form {
+        gap: var(--space-4);
+    }
+
+    .form-hero {
+        padding: var(--space-6) 0;
+    }
+
+    .form-hero-title {
+        font-size: var(--text-2xl);
+    }
+
+    .form-section {
+        padding: var(--space-6) 0;
+    }
+
+    .aviso-legal {
+        padding: var(--space-3);
+        margin: var(--space-4) 0;
+    }
 }
 
 /* ========================================
