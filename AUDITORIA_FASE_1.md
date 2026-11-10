@@ -446,8 +446,8 @@ cp .env.example .env
 # Editar .env con credenciales de MySQL
 
 # 4. Crear base de datos en MySQL
-mysql -u root -p -e "CREATE DATABASE enlaces_costa_grande CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -u root -p -e "CREATE DATABASE enlaces_costa_grande_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -p -e "CREATE DATABASE isp_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -p -e "CREATE DATABASE isp_portal_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # 5. Inicializar migraciones
 flask db init

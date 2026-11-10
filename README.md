@@ -1,6 +1,6 @@
 # Portal de Verificación de Cobertura y Solicitud de Instalación
 
-## Enlaces Costa Grande
+## Internet Regional
 
 Portal web que permite a prospectos verificar disponibilidad de cobertura de internet, consultar planes disponibles, obtener cotización estimada y solicitar instalación.
 
@@ -71,8 +71,8 @@ nano .env  # o tu editor preferido
 ### 5. Crear base de datos en MySQL
 
 ```sql
-CREATE DATABASE enlaces_costa_grande CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE enlaces_costa_grande_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE isp_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE isp_portal_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ### 6. Inicializar migraciones
@@ -276,13 +276,13 @@ flask config
 
 ## 👥 Equipo
 
-Desarrollado para **Enlaces Costa Grande**
+Desarrollado para **Internet Regional**
 
 ---
 
 ## 📄 Licencia
 
-Privado - Todos los derechos reservados
+Todos los derechos reservados. Código publicado como muestra de portafolio.
 
 ---
 

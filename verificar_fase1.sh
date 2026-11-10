@@ -6,7 +6,7 @@
 echo "=========================================="
 echo "VERIFICACIÓN DE FASE 1"
 echo "Portal de Verificación de Cobertura"
-echo "Enlaces Costa Grande"
+echo "Internet Regional"
 echo "=========================================="
 echo ""
 

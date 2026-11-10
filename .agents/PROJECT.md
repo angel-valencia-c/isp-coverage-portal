@@ -2,7 +2,7 @@
 
 ## Resumen Ejecutivo
 
-Portal web para Enlaces Costa Grande que permite a prospectos verificar disponibilidad de cobertura de internet en su ubicación, consultar planes disponibles, obtener una cotización estimada y solicitar instalación. El sistema incluye un panel administrativo para que el equipo de ventas gestione las solicitudes recibidas y un módulo de administración de catálogo de cobertura.
+Portal web para Internet Regional que permite a prospectos verificar disponibilidad de cobertura de internet en su ubicación, consultar planes disponibles, obtener una cotización estimada y solicitar instalación. El sistema incluye un panel administrativo para que el equipo de ventas gestione las solicitudes recibidas y un módulo de administración de catálogo de cobertura.
 
 El producto reduce la carga operativa de atención telefónica, acelera el proceso de conversión de prospectos y proporciona visibilidad sobre la demanda de instalación por zona geográfica.
 
@@ -31,7 +31,7 @@ El sistema debe proporcionar al equipo de ventas una herramienta para visualizar
 
 ### Identidad Corporativa
 
-El proyecto pertenece a **Enlaces Costa Grande**, empresa proveedora de servicios de internet. Todo el diseño visual, la comunicación y la experiencia de usuario deben reflejar la identidad de esta marca.
+El proyecto pertenece a **Internet Regional**, empresa proveedora de servicios de internet. Todo el diseño visual, la comunicación y la experiencia de usuario deben reflejar la identidad de esta marca.
 
 ### Dirección Visual
 
@@ -42,7 +42,7 @@ El proyecto pertenece a **Enlaces Costa Grande**, empresa proveedora de servicio
 - **Accesible**: Diseño inclusivo que funcione para usuarios no técnicos.
 
 **Paleta de colores base**:
-- Se partirá de los colores corporativos de Enlaces Costa Grande.
+- Se partirá de los colores corporativos de Internet Regional.
 - El agente de frontend propondrá la paleta final basada en la identidad de marca.
 - Los colores deben transmitir: confianza, tecnología, velocidad y profesionalismo.
 - Se recomienda incluir colores de acento para llamadas a la acción (CTAs).
@@ -68,7 +68,7 @@ El proyecto pertenece a **Enlaces Costa Grande**, empresa proveedora de servicio
 ### Activos de Marca
 
 **Pendiente de definir**:
-- Logo de Enlaces Costa Grande y sus variantes (horizontal, vertical, ícono).
+- Logo de Internet Regional y sus variantes (horizontal, vertical, ícono).
 - Manual de marca o lineamientos de branding específicos.
 - Imágenes o fotografías oficiales de la empresa.
 
@@ -285,7 +285,7 @@ El sistema debe organizarse en capas claramente separadas con responsabilidades 
 
 ### 1. Prospecto (Usuario Público)
 
-**Descripción**: Persona interesada en contratar el servicio de internet de Enlaces Costa Grande. No requiere autenticación.
+**Descripción**: Persona interesada en contratar el servicio de internet de Internet Regional. No requiere autenticación.
 
 **Objetivos**:
 - Saber si su ubicación tiene cobertura.
@@ -335,7 +335,7 @@ El sistema debe organizarse en capas claramente separadas con responsabilidades 
 
 ### 3. Administrador / Personal de Ventas
 
-**Descripción**: Miembro del equipo de Enlaces Costa Grande encargado de gestionar las solicitudes de instalación recibidas y dar seguimiento a prospectos.
+**Descripción**: Miembro del equipo de Internet Regional encargado de gestionar las solicitudes de instalación recibidas y dar seguimiento a prospectos.
 
 **Objetivos**:
 - Ver solicitudes agrupadas por zona.
@@ -433,7 +433,7 @@ El sistema debe organizarse en capas claramente separadas con responsabilidades 
 
 **RF-013**: El sistema debe validar si existe otra solicitud pendiente con el mismo teléfono en los últimos 7 días. Si existe, mostrar mensaje: "Ya tienes una solicitud pendiente. Te contactaremos pronto."
 
-**RF-014**: El sistema debe mostrar aviso visible de que la contratación formal requiere contrato firmado con Enlaces Costa Grande.
+**RF-014**: El sistema debe mostrar aviso visible de que la contratación formal requiere contrato firmado con Internet Regional.
 
 ### Vista Administrativa
 
@@ -814,7 +814,7 @@ Estos campos permiten trazabilidad completa y auditoría de cambios.
 
 **RN-024**: El portal es público y accesible desde internet sin restricciones de red.
 
-**RN-025**: La contratación formal del servicio requiere contrato firmado entre el cliente y Enlaces Costa Grande. El portal solo captura la solicitud, no gestiona la firma del contrato.
+**RN-025**: La contratación formal del servicio requiere contrato firmado entre el cliente y Internet Regional. El portal solo captura la solicitud, no gestiona la firma del contrato.
 
 ---
 
@@ -839,7 +839,7 @@ Estos campos permiten trazabilidad completa y auditoría de cambios.
 
 ### Dependencias
 
-**D-001**: **Catálogo de cobertura**. El sistema depende de que Enlaces Costa Grande proporcione el catálogo completo y actualizado de zonas con cobertura.
+**D-001**: **Catálogo de cobertura**. El sistema depende de que Internet Regional proporcione el catálogo completo y actualizado de zonas con cobertura.
 
 **D-002**: **Definición de planes y precios**. El sistema requiere que los planes, velocidades y precios estén definidos antes de la implementación.
 
@@ -847,7 +847,7 @@ Estos campos permiten trazabilidad completa y auditoría de cambios.
 
 **D-004**: **Definición de usuarios administrativos iniciales**. Se requiere identificar quiénes serán los primeros usuarios del panel administrativo y sus roles.
 
-**D-005**: **Activos de marca**. Se requieren logo, colores corporativos y lineamientos de branding de Enlaces Costa Grande para el diseño visual final.
+**D-005**: **Activos de marca**. Se requieren logo, colores corporativos y lineamientos de branding de Internet Regional para el diseño visual final.
 
 ---
 
@@ -1001,7 +1001,7 @@ Las siguientes preguntas deben resolverse antes o durante la implementación:
 
 ## Glosario
 
-**Cobertura**: Disponibilidad de infraestructura de red de Enlaces Costa Grande en una zona geográfica específica que permite ofrecer el servicio de internet. En V1 es binaria (activa/inactiva), preparada para evolucionar a tipos más complejos (parcial, condicional, planificada).
+**Cobertura**: Disponibilidad de infraestructura de red de Internet Regional en una zona geográfica específica que permite ofrecer el servicio de internet. En V1 es binaria (activa/inactiva), preparada para evolucionar a tipos más complejos (parcial, condicional, planificada).
 
 **Zona geográfica**: Entidad que representa una ubicación geográfica dentro de la jerarquía territorial (municipio, colonia, comunidad). Existe independientemente de si hay cobertura o no.
 
@@ -1015,7 +1015,7 @@ Las siguientes preguntas deben resolverse antes o durante la implementación:
 
 **Cotización estimada**: Cálculo aproximado del costo total del servicio incluyendo instalación (costo estándar base + ajuste por zona, si aplica) y mensualidad del plan seleccionado. La cotización está sujeta a validación técnica y el monto final puede variar.
 
-**Contrato firmado**: Documento legal entre el cliente y Enlaces Costa Grande que formaliza la contratación del servicio. Requisito obligatorio para la instalación del servicio. El portal no gestiona la firma del contrato.
+**Contrato firmado**: Documento legal entre el cliente y Internet Regional que formaliza la contratación del servicio. Requisito obligatorio para la instalación del servicio. El portal no gestiona la firma del contrato.
 
 **Solicitud de instalación**: Registro de los datos de un prospecto interesado en contratar el servicio, incluyendo información de contacto, ubicación y plan de interés. Puede ser de tipo "solicitud_cobertura" (con plan) o "lead_sin_cobertura" (sin plan).
 

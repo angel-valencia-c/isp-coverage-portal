@@ -258,12 +258,12 @@ FLASK_ENV=development
 SECRET_KEY=your-secret-key-here
 
 # Base de Datos
-DATABASE_URL=mysql+pymysql://user:password@localhost:3306/enlaces_costa_grande
+DATABASE_URL=mysql+pymysql://user:password@localhost:3306/isp_portal
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your-password
-DB_NAME=enlaces_costa_grande
+DB_NAME=isp_portal
 
 # Testing
 TESTING_DATABASE_URL=mysql+pymysql://user:password@localhost:3306/enlaces_test
@@ -586,7 +586,7 @@ Implementar la funcionalidad básica del portal público para que prospectos pue
 **Observaciones**
 - Esta fase entrega el primer valor al prospecto
 - La experiencia visual es crítica para conversión
-- El branding debe seguir los lineamientos de Enlaces Costa Grande
+- El branding debe seguir los lineamientos de Internet Regional
 
 ---
 
@@ -952,7 +952,7 @@ Las siguientes preguntas del PROJECT.md deben resolverse antes o durante la impl
 Las siguientes decisiones ya están definidas en el PROJECT.md y no deben tratarse como pendientes:
 
 - ✅ El portal es público y accesible desde internet (RN-024)
-- ✅ El branding es de Enlaces Costa Grande
+- ✅ El branding es de Internet Regional
 - ✅ La cobertura se administra por catálogo estructurado (RN-001)
 - ✅ Existe un costo estándar base de instalación definido por el superadministrador (CA-020)
 - ✅ El superadministrador puede ajustar el costo por zona (RN-003)

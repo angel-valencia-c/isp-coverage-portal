@@ -34,11 +34,11 @@ def run_seeds():
     Busca registros existentes por clave única antes de crear nuevos.
     """
     # Crear o buscar usuario administrador
-    admin = UsuarioAdministrativo.query.filter_by(email='admin@enlacescostagrande.com').first()
+    admin = UsuarioAdministrativo.query.filter_by(email='admin@example.com').first()
     if not admin:
         admin = UsuarioAdministrativo(
             nombre='Administrador Sistema',
-            email='admin@enlacescostagrande.com',
+            email='admin@example.com',
             password='admin123',
             rol='superadministrador',
             activo=True

@@ -1,6 +1,6 @@
 """
 Portal de Verificación de Cobertura y Solicitud de Instalación
-Enlaces Costa Grande
+Internet Regional
 
 Aplicación Flask principal con factory pattern.
 """

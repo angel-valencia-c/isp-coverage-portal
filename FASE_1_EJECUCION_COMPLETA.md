@@ -278,8 +278,8 @@ cryptography==41.0.7
 FLASK_APP=app
 FLASK_ENV=development
 SECRET_KEY=change-this-secret-key-in-production
-DATABASE_URL=mysql+pymysql://root:***@localhost:3306/enlaces_costa_grande
-TESTING_DATABASE_URL=mysql+pymysql://root:***@localhost:3306/enlaces_costa_grande_test
+DATABASE_URL=mysql+pymysql://root:***@localhost:3306/isp_portal
+TESTING_DATABASE_URL=mysql+pymysql://root:***@localhost:3306/isp_portal_test
 LOG_LEVEL=DEBUG
 ```
 

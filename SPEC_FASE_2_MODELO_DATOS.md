@@ -2,7 +2,7 @@
 
 ## Objective
 
-Crear el esquema completo de base de datos para el Portal de Verificación de Cobertura de Enlaces Costa Grande, implementando todas las entidades, relaciones, campos de auditoría, índices y seeds de datos de prueba definidos en el PROJECT.md.
+Crear el esquema completo de base de datos para el Portal de Verificación de Cobertura de Internet Regional, implementando todas las entidades, relaciones, campos de auditoría, índices y seeds de datos de prueba definidos en el PROJECT.md.
 
 **¿Por qué?**
 El modelo de datos es la base sobre la cual se construirán todas las funcionalidades del sistema (Fases 3-10). Un modelo incorrecto o incompleto requerirá refactor costoso en fases posteriores.
@@ -259,7 +259,7 @@ from .base import BaseModel
 
 class Municipio(BaseModel):
     """
-    Municipio del estado de Guerrero donde opera Enlaces Costa Grande.
+    Municipio del estado de Guerrero donde opera Internet Regional.
     
     Relaciones:
     - Un municipio tiene muchas colonias/comunidades
@@ -581,7 +581,7 @@ pytest tests/models/test_municipio.py::TestMunicipioModel::test_crear_municipio 
   - [ ] 3-5 municipios reales de Guerrero (Acapulco, Chilpancingo, Iguala, Taxco, Zihuatanejo)
   - [ ] 5-10 colonias/comunidades reales de esos municipios
   - [ ] 3 planes de internet genéricos (Básico 20Mbps, Estándar 50Mbps, Premium 100Mbps)
-  - [ ] 1 usuario administrador (admin@enlacescostagrande.com)
+  - [ ] 1 usuario administrador (admin@example.com)
   - [ ] 1-2 coberturas de ejemplo
   - [ ] 1-2 solicitudes de ejemplo
 

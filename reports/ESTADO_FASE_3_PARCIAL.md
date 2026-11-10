@@ -97,7 +97,7 @@ flask run --host=0.0.0.0 --port=5000
 ### 5. Credenciales de acceso
 
 ```
-Email: admin@enlacescostagrande.com
+Email: admin@example.com
 Password: admin123
 Rol: superadministrador
 ```

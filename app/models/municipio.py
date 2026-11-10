@@ -1,7 +1,7 @@
 """
 Modelo Municipio
 
-Representa un municipio del estado de Guerrero donde opera Enlaces Costa Grande.
+Representa un municipio del estado de Guerrero donde opera Internet Regional.
 Es la unidad geográfica de nivel superior en la jerarquía territorial.
 """
 from app.extensions import db

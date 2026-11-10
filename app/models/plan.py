@@ -1,7 +1,7 @@
 """
 Modelo Plan
 
-Representa un plan de servicio de internet ofrecido por Enlaces Costa Grande.
+Representa un plan de servicio de internet ofrecido por Internet Regional.
 """
 from app.extensions import db
 from .base import BaseModel

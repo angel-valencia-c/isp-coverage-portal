@@ -1,4 +1,4 @@
-# Design System — Portal Enlaces Costa Grande
+# Design System — Portal Internet Regional
 
 ## 1. Objetivo visual
 

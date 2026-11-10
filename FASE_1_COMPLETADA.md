@@ -82,8 +82,8 @@
 
 4. **Crear base de datos en MySQL**:
    ```sql
-   CREATE DATABASE enlaces_costa_grande CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-   CREATE DATABASE enlaces_costa_grande_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   CREATE DATABASE isp_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   CREATE DATABASE isp_portal_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    ```
 
 5. **Inicializar migraciones**:

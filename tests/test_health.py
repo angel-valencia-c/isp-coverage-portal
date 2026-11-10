@@ -73,7 +73,7 @@ class TestRootEndpoint:
         Test: La respuesta debe incluir contenido del portal
         """
         response = client.get('/')
-        assert b'Enlaces Costa Grande' in response.data
+        assert b'Internet Regional' in response.data
         assert b'Verifica tu Cobertura' in response.data
 
 
